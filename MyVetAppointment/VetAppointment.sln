@@ -1,0 +1,57 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32228.430
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Domain", "Domain", "{C83D2E98-EC2B-403F-B45C-D223B3E1C230}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VetAppointment.Domain", "MyVetAppointment.Domain\VetAppointment.Domain.csproj", "{5DE8B8DF-8FD7-4762-980E-A66E1286C0C8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Application", "Application", "{92D3509C-B2F1-46BD-8671-B0D39C7CCDA7}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VetAppointment.Application", "MyVetAppointment.Application\VetAppointment.Application.csproj", "{E52F29EC-7D37-4074-A386-2437C100E2D0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{59943F43-78D1-41C3-BDC6-D48DF34B8BC1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VetAppointment.Infrastructure", "MyVetAppointment.Infrastructure\VetAppointment.Infrastructure.csproj", "{1D6C5A00-BF42-48F7-96C0-2CF92E5370AB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "API", "API", "{BD49CFF0-A44D-44E9-8022-36F5C84D7FDE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VetAppointment.API", "VetAppointment.API\VetAppointment.API.csproj", "{00016B5E-7BA2-47AE-AE42-CFD6460C38AB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5DE8B8DF-8FD7-4762-980E-A66E1286C0C8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5DE8B8DF-8FD7-4762-980E-A66E1286C0C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5DE8B8DF-8FD7-4762-980E-A66E1286C0C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5DE8B8DF-8FD7-4762-980E-A66E1286C0C8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E52F29EC-7D37-4074-A386-2437C100E2D0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E52F29EC-7D37-4074-A386-2437C100E2D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E52F29EC-7D37-4074-A386-2437C100E2D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E52F29EC-7D37-4074-A386-2437C100E2D0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1D6C5A00-BF42-48F7-96C0-2CF92E5370AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1D6C5A00-BF42-48F7-96C0-2CF92E5370AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1D6C5A00-BF42-48F7-96C0-2CF92E5370AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1D6C5A00-BF42-48F7-96C0-2CF92E5370AB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{00016B5E-7BA2-47AE-AE42-CFD6460C38AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{00016B5E-7BA2-47AE-AE42-CFD6460C38AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{00016B5E-7BA2-47AE-AE42-CFD6460C38AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{00016B5E-7BA2-47AE-AE42-CFD6460C38AB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{5DE8B8DF-8FD7-4762-980E-A66E1286C0C8} = {C83D2E98-EC2B-403F-B45C-D223B3E1C230}
+		{E52F29EC-7D37-4074-A386-2437C100E2D0} = {92D3509C-B2F1-46BD-8671-B0D39C7CCDA7}
+		{1D6C5A00-BF42-48F7-96C0-2CF92E5370AB} = {59943F43-78D1-41C3-BDC6-D48DF34B8BC1}
+		{00016B5E-7BA2-47AE-AE42-CFD6460C38AB} = {BD49CFF0-A44D-44E9-8022-36F5C84D7FDE}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {0CEF13E3-ECAB-44BB-9598-FCD43489B8B3}
+	EndGlobalSection
+EndGlobal

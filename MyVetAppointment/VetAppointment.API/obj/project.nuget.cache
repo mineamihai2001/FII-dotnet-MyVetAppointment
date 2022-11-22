@@ -1,0 +1,15 @@
+{
+  "version": 2,
+  "dgSpecHash": "rMaSRSRIzwmtdcGYnDcyzIIEVdBfIaZ6uigIVhv1iroY02cchBYEnxqLx9sqmGLq76NBLBYYufXs3JkGbeU/0w==",
+  "success": true,
+  "projectFilePath": "D:\\Informatica\\Anul_3\\semestrul_1\\laboratoare\\.NET\\dotnet-MyVetAppointment-Workspace\\dotnet-MyVetAppointment\\MyVetAppointment\\VetAppointment.API\\VetAppointment.API.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\minea\\.nuget\\packages\\microsoft.extensions.apidescription.server\\3.0.0\\microsoft.extensions.apidescription.server.3.0.0.nupkg.sha512",
+    "C:\\Users\\minea\\.nuget\\packages\\microsoft.openapi\\1.2.3\\microsoft.openapi.1.2.3.nupkg.sha512",
+    "C:\\Users\\minea\\.nuget\\packages\\swashbuckle.aspnetcore\\6.2.3\\swashbuckle.aspnetcore.6.2.3.nupkg.sha512",
+    "C:\\Users\\minea\\.nuget\\packages\\swashbuckle.aspnetcore.swagger\\6.2.3\\swashbuckle.aspnetcore.swagger.6.2.3.nupkg.sha512",
+    "C:\\Users\\minea\\.nuget\\packages\\swashbuckle.aspnetcore.swaggergen\\6.2.3\\swashbuckle.aspnetcore.swaggergen.6.2.3.nupkg.sha512",
+    "C:\\Users\\minea\\.nuget\\packages\\swashbuckle.aspnetcore.swaggerui\\6.2.3\\swashbuckle.aspnetcore.swaggerui.6.2.3.nupkg.sha512"
+  ],
+  "logs": []
+}
