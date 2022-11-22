@@ -21,22 +21,22 @@
 		public Patient Patient { get; private set; }
 		public Billing Billing { get; private set; }
 
-		public void AttachRoomToAppointment(Room room)
+		public void AttachAppointmentToRoom(Room room)
 		{
 			Room = room;
 		}
 
-		public void AttachMedicToAppointment(Medic medic)
+		public void AttachAppointmentToMedic(Medic medic)
 		{
 			Medic = medic;
 		}
 
-		public void AttachPatientToAppointment(Pacient patient)
+		public void AttachAppointmentToPatient(Patient patient)
 		{
 			Patient = patient;
 		}
 
-		public void AttachBillingToAppointment(Billing billing)
+		public void AttachAppointmentToBilling(Billing billing)
 		{
 			Billing = billing;
 		}

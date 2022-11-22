@@ -1,4 +1,6 @@
-﻿namespace VetAppointment.Domain.Models
+﻿using VetAppointment.Domain.Helpers;
+
+namespace VetAppointment.Domain.Models
 {
     public class Patient
     {
@@ -21,7 +23,7 @@
         public DateTime BirthDate { get; private set; }
         public Guid OwnerId { get; private set; }
         public Guid MedicId { get; private set; }
-        public List<Appointment> Appointments { get; private set; } = new List<Appointments>();
+        public List<Appointment> Appointments { get; private set; } = new List<Appointment>();
 
         public void AttachPetToOwner(Client client)
         {
@@ -37,7 +39,7 @@
         {
             if (!appointments.Any())
             {
-                return Result.Failure("Add at least an appointment to the medic")
+                return Result.Failure("Add at least an appointment to the medic");
             }
 
             appointments.ForEach(appointment =>

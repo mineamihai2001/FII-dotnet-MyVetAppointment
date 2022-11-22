@@ -55,7 +55,7 @@ namespace VetAppointment.Domain.Models
         {
             if (!appointments.Any())
             {
-                return Result.Failure("Add at least an appointment to the medic")
+                return Result.Failure("Add at least an appointment to the medic");
             }
 
             appointments.ForEach(appointment =>

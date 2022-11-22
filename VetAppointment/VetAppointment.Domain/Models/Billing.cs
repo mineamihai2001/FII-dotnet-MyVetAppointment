@@ -21,7 +21,6 @@
 		public void AttachAppointmentToBilling(Appointment appointment)
 		{
 			Appointment = appointment;
-			appointment.AttachBillingToAppointment(appointment);
 		}
 
 		public void AttachClientToBilling(Client client)

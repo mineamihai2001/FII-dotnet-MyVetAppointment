@@ -13,9 +13,9 @@ namespace VetAppointment.Domain.Models
 
         public Guid Id { get; private set; }
         public string Type { get; private set; }
-        public List<Appointment> Appointments { get; private set; } = new List<Appointments>();
+        public List<Appointment> Appointments { get; private set; } = new List<Appointment>();
 
-        public Result RegisterAppointmentsToRoom(List<Room> appointments)
+        public Result RegisterAppointmentsToRoom(List<Appointment> appointments)
         {
             if (!appointments.Any())
             {
@@ -24,7 +24,7 @@ namespace VetAppointment.Domain.Models
 
             appointments.ForEach(appointment =>
             {
-                appointment.AttachRoomToAppointment(this);
+                appointment.AttachAppointmentToRoom(this);
                 Appointments.Add(appointment);
             });
 

@@ -1,5 +1,6 @@
 ﻿using VetAppointment.Application;
 using VetAppointment.Domain.Models;
+using VetAppointment.Infrastructure;
 using VetAppointment.Infrastructure.Repositories;
 
 namespace VetRoom.Infrastructure.Generics.GenericRepositories
