@@ -7,5 +7,6 @@ namespace VetAppointment.API.Controllers
     [ApiController]
     public class ClientController : ControllerBase
     {
+
     }
 }

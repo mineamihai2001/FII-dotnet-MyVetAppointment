@@ -3,7 +3,7 @@ using VetAppointment.Domain.Models;
 
 namespace VetAppointment.Infrastructure.Repositories
 {
-    public class ClinicRepository : ITemplateRepository<Clinic>
+    public class ClinicRepository : ITemplateRepository<Clinic>, IClinicRepository
     {
         private readonly DatabaseContext context;
 
