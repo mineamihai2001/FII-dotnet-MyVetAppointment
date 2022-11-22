@@ -1,30 +1,35 @@
-﻿namespace VetAppointment.Domain.Models
+﻿using VetAppointment.Domain.Helpers;
 
-public class Room
+namespace VetAppointment.Domain.Models
 {
-	public Room(string type)
-	{
-		Id = Guid.NewGuid();
-		Type = type;
-	}
 
-	public Guid Id { get; private set; }
-	public string Type { get; private set; }
-    public List<Appointment> Appointments { get; private set; } = new List<Appointments>();
-
-    public Result RegisterAppointmentsToRoom(List<Room> appointments)
+    public class Room
     {
-        if (!appointments.Any())
+        public Room(string type)
         {
-            return Result.Failure("Add at least an appointment to the room");
+            Id = Guid.NewGuid();
+            Type = type;
         }
 
-        appointments.ForEach(appointment =>
-        {
-            appointment.AttachRoomToAppointment(this);
-            Appointments.Add(appointment);
-        });
+        public Guid Id { get; private set; }
+        public string Type { get; private set; }
+        public List<Appointment> Appointments { get; private set; } = new List<Appointments>();
 
-        return Result.Success();
+        public Result RegisterAppointmentsToRoom(List<Room> appointments)
+        {
+            if (!appointments.Any())
+            {
+                return Result.Failure("Add at least an appointment to the room");
+            }
+
+            appointments.ForEach(appointment =>
+            {
+                appointment.AttachRoomToAppointment(this);
+                Appointments.Add(appointment);
+            });
+
+            return Result.Success();
+        }
     }
+
 }
