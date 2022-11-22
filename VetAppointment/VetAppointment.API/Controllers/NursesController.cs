@@ -5,7 +5,7 @@ namespace VetAppointment.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class NurseController : ControllerBase
+    public class NursesController : ControllerBase
     {
     }
 }
