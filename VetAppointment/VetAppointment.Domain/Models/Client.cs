@@ -19,6 +19,7 @@ namespace VetAppointment.Domain.Models
         public string EmailAddress { get; private set; }
         public string Address { get; private set; }
         public List<Patient> Pets { get; private set; } = new List<Patient>();
+        public List<Billing> Billings { get; private set; } = new List<Billing>();
         public Guid MedicId { get; private set; }
 
         public Result RegisterPetsToClient(List<Patient> pets)
@@ -32,6 +33,22 @@ namespace VetAppointment.Domain.Models
             {
                 pet.AttachPetToOwner(this);
                 Pets.Add(pet);
+            });
+
+            return Result.Success();
+        }
+
+        public Result RegisterBillingsToClient(List<Billing> billings)
+        {
+            if (!billings.Any())
+            {
+                return Result.Failure("Add at least a billing to the client");
+            }
+
+            billings.ForEach(billing =>
+            {
+                billing.AttachClientToBilling(this);
+                Billings.Add(billing);
             });
 
             return Result.Success();
