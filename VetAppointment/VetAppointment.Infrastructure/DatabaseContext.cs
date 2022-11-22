@@ -16,7 +16,7 @@ namespace VetAppointment.Infrastructure
 
         public DbSet<Clinic> Clinics => Set<Clinic>();
 
-        public DbSet<SuperUser> SuperUsers => Set<SuperUser>();;
+        public DbSet<SuperUser> SuperUsers => Set<SuperUser>();
 
         public DbSet<Drug> Drugs => Set<Drug>();
 
