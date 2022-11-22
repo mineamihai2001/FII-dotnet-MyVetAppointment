@@ -21,6 +21,7 @@
         public DateTime BirthDate { get; private set; }
         public Guid OwnerId { get; private set; }
         public Guid MedicId { get; private set; }
+        public List<Appointment> Appointments { get; private set; } = new List<Appointments>();
 
         public void AttachPetToOwner(Client client)
         {
@@ -30,6 +31,22 @@
         public void AttachPatientToMedic(Medic medic)
         {
             MedicId = medic.Id;
+        }
+
+        public Result RegisterAppointmentsToPatient(List<Appointment> appointments)
+        {
+            if (!appointments.Any())
+            {
+                return Result.Failure("Add at least an appointment to the medic")
+            }
+
+            appointments.ForEach(appointment =>
+            {
+                appointment.AttachAppointmentToPatient(this);
+                Appointments.Add(appointment);
+            });
+
+            return Result.Success();
         }
     }
 }
