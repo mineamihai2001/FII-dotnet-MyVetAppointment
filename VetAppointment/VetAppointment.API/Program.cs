@@ -1,3 +1,8 @@
+using VetAppointment.Application;
+using VetAppointment.Infrastructure;
+using VetAppointment.Infrastructure.Generics.GenericRepositories;
+using VetAppointment.Infrastructure.Repositories;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -6,6 +11,9 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddScoped<IDatabaseContext, DatabaseContext>();
+builder.Services.AddScoped<IDrugRepository, DrugRepository>();
 
 var app = builder.Build();
 
