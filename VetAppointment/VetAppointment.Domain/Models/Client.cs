@@ -1,5 +1,5 @@
 ﻿
-namespace VetAppointment.Domain.Models;
+using VetAppointment.Domain.Helpers;
 
 namespace VetAppointment.Domain.Models
 {
