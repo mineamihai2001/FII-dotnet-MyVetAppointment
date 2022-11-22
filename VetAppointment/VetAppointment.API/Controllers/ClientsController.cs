@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using VetAppointment.API.DTOs;
 using VetAppointment.Domain.Models;
 using VetAppointment.Infrastructure.Generics;

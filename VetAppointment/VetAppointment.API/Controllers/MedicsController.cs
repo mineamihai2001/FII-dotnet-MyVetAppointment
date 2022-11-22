@@ -33,10 +33,10 @@ namespace VetAppointment.API.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            return Ok(clientRepository.GetAll());
+            return Ok(medicRepository.GetAll());
         }
 
-        [HttpPost("{clientId:guid}/clients")]
+        [HttpPost("{medicId:guid}/clients")]
         public IActionResult RegisterClients(Guid medicId,
             [FromBody] List<CreateClientDto> dtos)
         {
