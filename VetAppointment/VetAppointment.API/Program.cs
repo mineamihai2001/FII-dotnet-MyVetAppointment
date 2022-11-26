@@ -1,7 +1,7 @@
-using VetAppointment.Application;
+using VetAppointment.Domain.Models;
 using VetAppointment.Infrastructure;
+using VetAppointment.Infrastructure.Generics;
 using VetAppointment.Infrastructure.Generics.GenericRepositories;
-using VetAppointment.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,8 +12,16 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddScoped<IDatabaseContext, DatabaseContext>();
-builder.Services.AddScoped<IDrugRepository, DrugRepository>();
+builder.Services.AddScoped<DatabaseContext>();
+builder.Services.AddScoped<IRepository<Appointment>, AppointmentRepository>();
+builder.Services.AddScoped<IRepository<Bill>, BillRepository>();
+builder.Services.AddScoped<IRepository<Client>, ClientRepository>();
+builder.Services.AddScoped<IRepository<Medicine>, MedicineRepository>();
+builder.Services.AddScoped<IRepository<Medic>, MedicRepository>();
+builder.Services.AddScoped<IRepository<Nurse>, NurseRepository>();
+builder.Services.AddScoped<IRepository<Patient>, PatientRepository>();
+builder.Services.AddScoped<IRepository<Room>, RoomRepository>();
+
 
 var app = builder.Build();
 

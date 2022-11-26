@@ -4,9 +4,9 @@ using VetAppointment.Domain.Models;
 
 namespace VetAppointment.Infrastructure.Generics.GenericRepositories
 {
-    public class AppointmentRepository : Repository<Appointment>
+    public class MedicineRepository : Repository<Medicine>
     {
-        public AppointmentRepository(DatabaseContext context) : base(context)
+        public MedicineRepository(DatabaseContext context) : base(context)
         {
         }
     }

@@ -5,14 +5,14 @@ namespace VetAppointment.Application
 {
     public interface IDatabaseContext
     {
-        DbSet<Clinic> Clinics { get; }
-        DbSet<SuperUser> SuperUsers { get; }
-        DbSet<Drug> Drugs { get; }
+        DbSet<Medicine> Medicine { get; }
         DbSet<Client> Clients { get; }
         DbSet<Medic> Medics { get; }
         DbSet<Nurse> Nurses { get; }
         DbSet<Patient> Patients { get; }
-
+        DbSet<Room> Rooms { get; }
+        DbSet<Bill> Bills { get; }
+        DbSet<Appointment> Appointments { get; }
 
         void Save();
     }

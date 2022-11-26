@@ -6,7 +6,7 @@
         public string Species { get; set; }
         public string Race { get; set; }
         public bool Gender { get; set; }
-        public decimal Weight { get; set; }
+        public double Weight { get; set; }
         public DateTime BirthDate { get; set; }
     }
 }

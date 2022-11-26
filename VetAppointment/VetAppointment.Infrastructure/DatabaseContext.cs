@@ -14,14 +14,10 @@ namespace VetAppointment.Infrastructure
 
         public DbSet<Nurse> Nurses => Set<Nurse>();
 
-        public DbSet<Clinic> Clinics => Set<Clinic>();
-
-        public DbSet<SuperUser> SuperUsers => Set<SuperUser>();
-
-        public DbSet<Drug> Drugs => Set<Drug>();
+        public DbSet<Medicine> Medicine => Set<Medicine>();
         public DbSet<Room> Rooms => Set<Room>();
         public DbSet<Appointment> Appointments => Set<Appointment>();
-        public DbSet<Billing> Billings => Set<Billing>();
+        public DbSet<Bill> Bills => Set<Bill>();
 
         public void Save()
         {

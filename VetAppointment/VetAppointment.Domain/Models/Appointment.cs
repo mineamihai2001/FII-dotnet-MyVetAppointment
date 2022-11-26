@@ -16,29 +16,29 @@
 		public DateTime StartDate { get; private set; }
 		public DateTime EndDate { get; private set; }
 		public string Description { get; private set; }
-		public Medic Medic { get; private set; }
-		public Room Room { get; private set; }
-		public Patient Patient { get; private set; }
-		public Billing Billing { get; private set; }
+		public Guid MedicId { get; private set; }
+		public Guid RoomId { get; private set; }
+		public Guid PatientId { get; private set; }
+		public Guid BillId { get; private set; }
 
 		public void AttachAppointmentToRoom(Room room)
 		{
-			Room = room;
+			RoomId = room.Id;
 		}
 
 		public void AttachAppointmentToMedic(Medic medic)
 		{
-			Medic = medic;
+			MedicId = medic.Id;
 		}
 
 		public void AttachAppointmentToPatient(Patient patient)
 		{
-			Patient = patient;
+			PatientId = patient.Id;
 		}
 
-		public void AttachAppointmentToBilling(Billing billing)
+		public void AttachAppointmentToBilling(Bill bill)
 		{
-			Billing = billing;
+			BillId = bill.Id;
 		}
 
 	}
