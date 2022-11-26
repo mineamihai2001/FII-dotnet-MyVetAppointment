@@ -4,7 +4,7 @@ namespace VetAppointment.Domain.Models
 {
     public class Patient
     {
-        public Patient(string name, string species, string race, bool gender, decimal weight, DateTime birthDate)
+        public Patient(string name, string species, string race, bool gender, double weight, DateTime birthDate)
         {
             Id = Guid.NewGuid();
             Name = name;
@@ -19,7 +19,7 @@ namespace VetAppointment.Domain.Models
         public string Species { get; private set; }
         public string Race { get; private set; }
         public bool Gender { get; private set; }
-        public decimal Weight { get; private set; }
+        public double Weight { get; private set; }
         public DateTime BirthDate { get; private set; }
         public Guid OwnerId { get; private set; }
         public Guid MedicId { get; private set; }

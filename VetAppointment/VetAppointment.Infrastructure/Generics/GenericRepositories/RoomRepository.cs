@@ -1,26 +1,11 @@
-﻿using VetAppointment.Application;
-using VetAppointment.Domain.Models;
-using VetAppointment.Infrastructure;
-using VetAppointment.Infrastructure.Repositories;
+﻿using VetAppointment.Domain.Models;
 
-namespace VetRoom.Infrastructure.Generics.GenericRepositories
+namespace VetAppointment.Infrastructure.Generics.GenericRepositories
 {
-    public class RoomRepository : ITemplateRepository<Room>
+    public class RoomRepository : Repository<Room>
     {
-        private readonly DatabaseContext context;
-
-        public RoomRepository(DatabaseContext context)
+        public RoomRepository(DatabaseContext context) : base(context)
         {
-            this.context = context;
         }
-        public void Add(Room item) => context.Rooms.Add(item);
-
-        public void Delete(Room item) => context.Rooms.Remove(item);
-
-        public Room Get(int id) => context.Rooms.Find(id);
-
-        public List<Room> GetAll() => context.Rooms.ToList();
-
-        public void Save() => context.Save();
     }
 }
