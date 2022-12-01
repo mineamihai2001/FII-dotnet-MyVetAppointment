@@ -46,7 +46,7 @@ namespace VetAppointment.API.Controllers
                 return NotFound();
             }
 
-            List<Client> clients = dtos.Select(d => new Client(d.Name, d.PhoneNumber, d.EmailAddress, d.Address)).ToList();
+            List<Client> clients = dtos.Select(d => new Client(d.Name, d.PhoneNumber, d.EmailAddress, d.Address, medicId)).ToList();
 
             medic.RegisterClientsToMedic(clients);
 

@@ -24,7 +24,7 @@ namespace VetAppointment.API.Controllers
         [HttpPost]
         public IActionResult Create([FromBody] CreateClientDto dto)
         {
-            var client = new Client(dto.Name, dto.PhoneNumber, dto.EmailAddress, dto.Address);
+            var client = new Client(dto.Name, dto.PhoneNumber, dto.EmailAddress, dto.Address, dto.MedicId);
             clientRepository.Add(client);
             clientRepository.SaveChanges();
             return Created(nameof(Get), client);

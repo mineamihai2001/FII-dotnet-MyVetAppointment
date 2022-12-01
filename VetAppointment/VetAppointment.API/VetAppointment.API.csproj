@@ -19,4 +19,8 @@
     <ProjectReference Include="..\VetAppointment.Infrastructure\VetAppointment.Infrastructure.csproj" />
   </ItemGroup>
 
+	<ItemGroup>
+		<InternalVisibleTo Include="$(AssemblyName).Test" />
+	</ItemGroup>
+
 </Project>
