@@ -21,6 +21,12 @@ namespace VetAppointment.API.Controllers
             this.patientRepository = patientRepository;
         }
 
+        [HttpGet]
+        public IActionResult Get()
+        {
+            return Ok(clientRepository.GetAll());
+        }
+
         [HttpPost]
         public IActionResult Create([FromBody] CreateClientDto dto)
         {
@@ -28,12 +34,6 @@ namespace VetAppointment.API.Controllers
             clientRepository.Add(client);
             clientRepository.SaveChanges();
             return Created(nameof(Get), client);
-        }
-
-        [HttpGet]
-        public IActionResult Get()
-        {
-            return Ok(clientRepository.GetAll());
         }
 
         [HttpPost("{clientId:guid}/pets")]
