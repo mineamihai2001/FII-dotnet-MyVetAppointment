@@ -5,13 +5,14 @@ namespace VetAppointment.Domain.Models
 {
     public class Client
     {
-        public Client(string name, string phoneNumber, string emailAddress, string address)
+        public Client(string name, string phoneNumber, string emailAddress, string address, Guid medicId)
         {
             Id = Guid.NewGuid();
             Name = name;
             PhoneNumber = phoneNumber;
             EmailAddress = emailAddress;
             Address = address;
+            MedicId = medicId;
         }
         public Guid Id { get; private set; }
         public string Name { get; private set; }

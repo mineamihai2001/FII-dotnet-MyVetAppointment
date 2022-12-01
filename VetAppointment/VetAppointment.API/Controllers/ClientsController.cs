@@ -21,19 +21,19 @@ namespace VetAppointment.API.Controllers
             this.patientRepository = patientRepository;
         }
 
-        [HttpPost]
-        public IActionResult Create([FromBody] CreateClientDto dto)
-        {
-            var client = new Client(dto.Name, dto.PhoneNumber, dto.EmailAddress, dto.Address);
-            clientRepository.Add(client);
-            clientRepository.SaveChanges();
-            return Created(nameof(Get), client);
-        }
-
         [HttpGet]
         public IActionResult Get()
         {
             return Ok(clientRepository.GetAll());
+        }
+
+        [HttpPost]
+        public IActionResult Create([FromBody] CreateClientDto dto)
+        {
+            var client = new Client(dto.Name, dto.PhoneNumber, dto.EmailAddress, dto.Address, dto.MedicId);
+            clientRepository.Add(client);
+            clientRepository.SaveChanges();
+            return Created(nameof(Get), client);
         }
 
         [HttpPost("{clientId:guid}/pets")]
