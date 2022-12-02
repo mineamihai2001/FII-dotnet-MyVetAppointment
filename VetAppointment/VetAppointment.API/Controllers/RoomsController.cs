@@ -32,5 +32,25 @@ namespace VetAppointment.API.Controllers
             roomRepository.SaveChanges();
             return Created(nameof(Get), room);
         }
+
+        [HttpDelete("{roomId: guid}")]
+        public IActionResult Delete(Guid roomId)
+        {
+            var room = roomRepository.GetById(roomId);
+            if (room == null) return NotFound();
+            roomRepository.Delete(room);
+            roomRepository.SaveChanges();
+            return Ok("deleted");
+        }
+
+        [HttpPut("{roomId: guid}")]
+        public IActionResult Update(Guid roomId, [FromBody] CreateRoomDto dto)
+        {
+            var room = roomRepository.GetById(roomId);
+            if (room == null) return NotFound();
+            roomRepository.Update(room);
+            roomRepository.SaveChanges();
+            return Created(nameof(Get), room);
+        }
     }
 }

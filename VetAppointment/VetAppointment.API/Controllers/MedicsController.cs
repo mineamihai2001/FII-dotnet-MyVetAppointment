@@ -21,6 +21,12 @@ namespace VetAppointment.API.Controllers
             this.patientRepository = patientRepository;
         }
 
+        [HttpGet]
+        public IActionResult Get()
+        {
+            return Ok(medicRepository.GetAll());
+        }
+
         [HttpPost]
         public IActionResult Create([FromBody] CreateMedicDto dto)
         {
@@ -28,12 +34,6 @@ namespace VetAppointment.API.Controllers
             medicRepository.Add(medic);
             medicRepository.SaveChanges();
             return Created(nameof(Get), medic);
-        }
-
-        [HttpGet]
-        public IActionResult Get()
-        {
-            return Ok(medicRepository.GetAll());
         }
 
         [HttpPost("{medicId:guid}/clients")]
@@ -54,6 +54,26 @@ namespace VetAppointment.API.Controllers
             clients.ForEach(c => clientRepository.Add(c));
             patientRepository.SaveChanges();
             return NoContent();
+        }
+
+        [HttpDelete("{medicId:guid}")]
+        public IActionResult Delete(Guid medicId)
+        {
+            var medic = medicRepository.GetById(medicId);
+            if (medic == null) return NotFound();
+            medicRepository.Delete(medic);
+            medicRepository.SaveChanges();
+            return Ok("deleted");
+        }
+
+        [HttpPut("{medicId: guid}")]
+        public IActionResult Update(Guid medicId, [FromBody] CreateMedicDto dto)
+        {
+            var medic = medicRepository.GetById(medicId);
+            if (medic == null) return NotFound();
+            medicRepository.Update(medic);
+            medicRepository.SaveChanges();
+            return Created(nameof(Get), medic);
         }
     }
 }
