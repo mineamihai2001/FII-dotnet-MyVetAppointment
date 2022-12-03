@@ -66,7 +66,7 @@ namespace VetAppointment.API.Controllers
             return Ok("deleted");
         }
 
-        [HttpPut("{medicId: guid}")]
+        [HttpPut("{medicId:guid}")]
         public IActionResult Update(Guid medicId, [FromBody] CreateMedicDto dto)
         {
             var medic = medicRepository.GetById(medicId);

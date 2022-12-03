@@ -33,7 +33,7 @@ namespace VetAppointment.API.Controllers
             return Created(nameof(Get), room);
         }
 
-        [HttpDelete("{roomId: guid}")]
+        [HttpDelete("{roomId:guid}")]
         public IActionResult Delete(Guid roomId)
         {
             var room = roomRepository.GetById(roomId);
@@ -43,7 +43,7 @@ namespace VetAppointment.API.Controllers
             return Ok("deleted");
         }
 
-        [HttpPut("{roomId: guid}")]
+        [HttpPut("{roomId:guid}")]
         public IActionResult Update(Guid roomId, [FromBody] CreateRoomDto dto)
         {
             var room = roomRepository.GetById(roomId);
