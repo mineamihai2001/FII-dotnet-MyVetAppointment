@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Dynamic;
 using System.Reflection;
+using System.Reflection.Metadata.Ecma335;
 //using System.Web.Http;
 using VetAppointment.API.DTOs;
 using VetAppointment.Domain.Models;
@@ -55,6 +56,20 @@ namespace VetAppointment.API.Controllers
             clientRepository.Add(client);
             clientRepository.SaveChanges();
             return Created(nameof(Get), client);
+        }
+
+        [HttpPost("batch")]
+        public IActionResult CreateFromList([FromBody] List<CreateClientDto> dtos)
+        {
+            List<Client> response = new List<Client>();
+            dtos.ForEach(dto =>
+            {
+                var client = new Client(dto.Name, dto.PhoneNumber, dto.EmailAddress, dto.Address, dto.MedicId);
+                clientRepository.Add(client);
+                clientRepository.SaveChanges();
+                response.Add(client);
+            });
+            return Ok(response.Select(client => Created(nameof(Get), client)));
         }
 
         [HttpDelete("{clientId:guid}")]
