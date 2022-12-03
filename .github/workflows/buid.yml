@@ -43,5 +43,5 @@ jobs:
         shell: powershell
         run: |
           .\.sonar\scanner\dotnet-sonarscanner begin /k:"mineamihai2001_dotnet-MyVetAppointment" /o:"mineamihai2001" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io"
-          dotnet run --project .\VetAppointment\VetAppointment.API\
+          dotnet build .\VetAppointment\VetAppointment.API\
           .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
