@@ -1,7 +1,8 @@
-﻿namespace VetAppointment.API.DTOs
+﻿namespace VetAppointment.API.DTOs.Update
 {
-    public class CreateBillDto
+    public class UpdateBillDto
     {
+        public Guid Id { get; set; }
         public DateTime BillingDate { get; set; }
         public string Summary { get; set; }
         public double PaymentSum { get; set; }

@@ -1,4 +1,4 @@
-﻿namespace VetAppointment.API.DTOs
+﻿namespace VetAppointment.API.DTOs.Create
 {
     public class CreateMedicineDto
     {

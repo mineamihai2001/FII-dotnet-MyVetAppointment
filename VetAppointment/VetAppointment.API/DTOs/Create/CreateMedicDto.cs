@@ -1,6 +1,6 @@
-﻿namespace VetAppointment.API.DTOs
+﻿namespace VetAppointment.API.DTOs.Create
 {
-    public class CreateNurseDto
+    public class CreateMedicDto
     {
         public string Name { get; set; }
         public string PhoneNumber { get; set; }
