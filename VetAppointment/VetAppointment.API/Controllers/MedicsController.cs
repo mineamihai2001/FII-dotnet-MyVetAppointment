@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using VetAppointment.API.DTOs;
+using System.Dynamic;
+using System.Reflection;
+using VetAppointment.API.DTOs.Create;
+using VetAppointment.API.DTOs.Update;
 using VetAppointment.Domain.Models;
 using VetAppointment.Infrastructure.Generics;
 
@@ -66,11 +69,22 @@ namespace VetAppointment.API.Controllers
             return Ok("deleted");
         }
 
-        [HttpPut("{medicId:guid}")]
-        public IActionResult Update(Guid medicId, [FromBody] CreateMedicDto dto)
+        [HttpPut]
+        public IActionResult Update([FromBody] UpdateMedicDto dto)
         {
-            var medic = medicRepository.GetById(medicId);
+            var medic = medicRepository.GetById(dto.Id);
             if (medic == null) return NotFound();
+
+            foreach (PropertyInfo prop in dto.GetType().GetProperties())
+            {
+                var key = prop.Name;
+                var newValue = prop.GetValue(dto, null);
+                var oldValue = medic.GetType().GetProperty(key).GetValue(medic, null);
+                if (oldValue != newValue)
+                {
+                    medic.GetType().GetProperty(key).SetValue(medic, newValue);
+                }
+            }
             medicRepository.Update(medic);
             medicRepository.SaveChanges();
             return Created(nameof(Get), medic);

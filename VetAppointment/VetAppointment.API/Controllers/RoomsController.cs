@@ -1,7 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using VetAppointment.API.DTOs;
+using System.Dynamic;
+using System.Reflection;
+using VetAppointment.API.DTOs.Create;
+using VetAppointment.API.DTOs.Update;
 using VetAppointment.Domain.Models;
 using VetAppointment.Infrastructure.Generics;
+using VetAppointment.Infrastructure.Generics.GenericRepositories;
 
 namespace VetAppointment.API.Controllers
 {
@@ -14,8 +18,8 @@ namespace VetAppointment.API.Controllers
 
         public RoomsController(IRepository<Room> roomRepository, IRepository<Appointment> appointmentRepository)
         {
-            this.roomRepository=roomRepository;
-            this.appointmentRepository=appointmentRepository;
+            this.roomRepository = roomRepository;
+            this.appointmentRepository = appointmentRepository;
         }
 
         [HttpGet]
@@ -27,7 +31,7 @@ namespace VetAppointment.API.Controllers
         [HttpPost]
         public ActionResult Create([FromBody] CreateRoomDto dto)
         {
-            var room = new Room( dto.Type, dto.RoomNumber, dto.Capacity);
+            var room = new Room(dto.Type, dto.RoomNumber, dto.Capacity);
             roomRepository.Add(room);
             roomRepository.SaveChanges();
             return Created(nameof(Get), room);
@@ -43,11 +47,22 @@ namespace VetAppointment.API.Controllers
             return Ok("deleted");
         }
 
-        [HttpPut("{roomId:guid}")]
-        public IActionResult Update(Guid roomId, [FromBody] CreateRoomDto dto)
+        [HttpPut]
+        public IActionResult Update([FromBody] UpdateRoomDto dto)
         {
-            var room = roomRepository.GetById(roomId);
+            var room = roomRepository.GetById(dto.Id);
             if (room == null) return NotFound();
+
+            foreach (PropertyInfo prop in dto.GetType().GetProperties())
+            {
+                var key = prop.Name;
+                var newValue = prop.GetValue(dto, null);
+                var oldValue = room.GetType().GetProperty(key).GetValue(room, null);
+                if (oldValue != newValue)
+                {
+                    room.GetType().GetProperty(key).SetValue(room, newValue);
+                }
+            }
             roomRepository.Update(room);
             roomRepository.SaveChanges();
             return Created(nameof(Get), room);

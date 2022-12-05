@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System.Dynamic;
 using System.Reflection;
 using System.Reflection.Metadata.Ecma335;
 //using System.Web.Http;
-using VetAppointment.API.DTOs;
+using VetAppointment.API.DTOs.Create;
+using VetAppointment.API.DTOs.Update;
 using VetAppointment.Domain.Models;
 using VetAppointment.Infrastructure.Generics;
 
@@ -83,11 +85,22 @@ namespace VetAppointment.API.Controllers
         }
 
 
-        [HttpPut("{clientId:guid}")]
-        public IActionResult Update(Guid clientId, [FromBody] CreateClientDto dto)
+        [HttpPut]
+        public IActionResult Update([FromBody] UpdateClientDto dto)
         {
-            var client = clientRepository.GetById(clientId);
+            var client = clientRepository.GetById(dto.Id);
             if (client == null) return NotFound();
+
+            foreach (PropertyInfo prop in dto.GetType().GetProperties())
+            {
+                var key = prop.Name;
+                var newValue = prop.GetValue(dto, null);
+                var oldValue = client.GetType().GetProperty(key).GetValue(client, null);
+                if (oldValue != newValue)
+                {
+                    client.GetType().GetProperty(key).SetValue(client, newValue);
+                }
+            }
             clientRepository.Update(client);
             clientRepository.SaveChanges();
             return Created(nameof(Get), client);
