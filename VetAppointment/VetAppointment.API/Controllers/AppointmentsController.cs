@@ -28,7 +28,7 @@ namespace VetAppointment.API.Controllers
         [HttpGet]
         public ActionResult Get()
         {
-            return Ok(appointmentRepository.GetAll());
+            return Ok(appointmentRepository.GetAll().Result);
         }
 
     }
