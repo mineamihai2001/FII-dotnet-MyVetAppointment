@@ -35,7 +35,7 @@ namespace VetAppointment.API.Controllers
         {
             var clients = await clientRepository.GetAll();
             clients!.ToList().ForEach(client => Console.WriteLine(client));
-            var result = clients.Select(async client =>
+            var result = clients!.Select(async client =>
             {
                 IDictionary<string, object> temp = new ExpandoObject()!;
                 foreach (PropertyInfo prop in client.GetType().GetProperties())
