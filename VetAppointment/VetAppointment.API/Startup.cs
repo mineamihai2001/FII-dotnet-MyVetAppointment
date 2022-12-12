@@ -58,4 +58,5 @@ app.MapControllers();
 
 app.Run();
 
-public partial class Startup { }
+
+//public partial class Startup { }

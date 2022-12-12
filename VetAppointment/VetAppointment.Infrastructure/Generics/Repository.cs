@@ -7,15 +7,14 @@ namespace VetAppointment.Infrastructure.Generics
     public abstract class Repository<T> : IRepository<T> where T : class
     {
         protected DatabaseContext context;
-        public Repository(DatabaseContext context)
+        protected Repository(DatabaseContext context)
         {
             this.context = context;
         }
         public virtual async Task<T?> Add(T entity)
         {
-            return context
-                .Add(entity)
-                .Entity;
+            await context.AddAsync(entity);
+            return entity;
         }
 
         public async Task<T?> Delete(T entity)
