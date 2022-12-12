@@ -2,7 +2,8 @@
 {
     public class Result
     {
-        public string Error { get; private set; }
+        public string? Error { get; private set; }
+
         public bool IsSuccess { get; private set; }
 
         public bool IsFailure { get; private set; }

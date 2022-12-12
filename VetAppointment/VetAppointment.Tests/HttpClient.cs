@@ -16,7 +16,7 @@ using System.Linq;
 namespace VetAppointment.Tests
 {
     [TestClass]
-    public class HttpClient<TEntryPoint> : WebApplicationFactory<Startup> where TEntryPoint : Startup
+    public class HttpClient<TEntryPoint> : WebApplicationFactory<Program> where TEntryPoint : Program
     {
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
@@ -43,7 +43,7 @@ namespace VetAppointment.Tests
                     catch (Exception e)
                     {
                         //Log errors or do anything you think it's needed
-                        throw e;
+                        throw;
                     }
                 }
             });
