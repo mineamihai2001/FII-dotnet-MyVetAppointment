@@ -19,6 +19,10 @@ namespace VetAppointment.Infrastructure
         public DbSet<Appointment> Appointments => Set<Appointment>();
         public DbSet<Bill> Bills => Set<Bill>();
 
+        public DatabaseContext(DbContextOptions<DatabaseContext> options) : base(options)
+        {
+            this.Database.EnsureCreated();
+        }
         public void Save()
         {
             SaveChanges();
@@ -26,7 +30,7 @@ namespace VetAppointment.Infrastructure
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlite("DataSource = VetAppointment.db");
+            //optionsBuilder.UseSqlite("DataSource = VetAppointment.db");
         }
     }
 }

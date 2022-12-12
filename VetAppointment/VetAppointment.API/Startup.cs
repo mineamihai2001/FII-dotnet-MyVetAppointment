@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Builder;
+using Microsoft.EntityFrameworkCore;
 using VetAppointment.Domain.Models;
 using VetAppointment.Infrastructure;
 using VetAppointment.Infrastructure.Generics;
@@ -26,7 +27,12 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddScoped<DatabaseContext>();
+//builder.Services.AddScoped<DatabaseContext>();
+builder.Services.AddDbContext<DatabaseContext>(
+    options => options.UseSqlite(
+        builder.Configuration.GetConnectionString("VetAppointmentDB"),
+    b => b.MigrationsAssembly(typeof(DatabaseContext).Assembly.FullName)));
+
 builder.Services.AddScoped<IRepository<Appointment>, AppointmentRepository>();
 builder.Services.AddScoped<IRepository<Bill>, BillRepository>();
 builder.Services.AddScoped<IRepository<Client>, ClientRepository>();
