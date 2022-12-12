@@ -11,28 +11,28 @@ namespace VetAppointment.Infrastructure.Generics
         {
             this.context = context;
         }
-        public virtual async Task<T> Add(T entity)
+        public virtual async Task<T?> Add(T entity)
         {
             return context
                 .Add(entity)
                 .Entity;
         }
 
-        public async Task<T> Delete(T entity)
+        public async Task<T?> Delete(T entity)
         {
             return context
                 .Remove(entity)
                 .Entity;
         }
 
-        public async Task<T> Update(T entity)
+        public async Task<T?> Update(T entity)
         {
             return context
                 .Update(entity)
                 .Entity;
         }
 
-        public async Task<IEnumerable<T>> Find(Expression<Func<T, bool>> predicate)
+        public async Task<IEnumerable<T>?> Find(Expression<Func<T, bool>> predicate)
         {
             return await context.Set<T>()
                 .AsQueryable()
@@ -40,13 +40,13 @@ namespace VetAppointment.Infrastructure.Generics
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<T>> GetAll()
+        public async Task<IEnumerable<T>?> GetAll()
         {
             return await context.Set<T>()
                 .ToListAsync();
         }
 
-        public async Task<T> GetById(Guid id)
+        public async Task<T?> GetById(Guid id)
         {
             return await context.FindAsync<T>(id);
         }
