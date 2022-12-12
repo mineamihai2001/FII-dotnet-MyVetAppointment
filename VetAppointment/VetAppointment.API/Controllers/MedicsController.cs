@@ -5,7 +5,9 @@ using System.Reflection;
 using VetAppointment.API.DTOs.Create;
 using VetAppointment.API.DTOs.Update;
 using VetAppointment.Domain.Models;
+using VetAppointment.Domain.Validators;
 using VetAppointment.Infrastructure.Generics;
+using FluentValidation;
 
 namespace VetAppointment.API.Controllers
 {
@@ -35,7 +37,7 @@ namespace VetAppointment.API.Controllers
         {
             var medic = new Medic(dto.Name, dto.PhoneNumber, dto.EmailAddress);
             var validator = new MedicValidator();
-            ValidationResult results = validator.Validate(medic);
+            var results = validator.Validate(medic);
             if (!results.IsValid)
             {
                 foreach (var failure in results.Errors)

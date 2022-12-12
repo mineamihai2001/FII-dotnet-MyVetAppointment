@@ -5,6 +5,7 @@ using System.Reflection;
 using VetAppointment.API.DTOs.Create;
 using VetAppointment.API.DTOs.Update;
 using VetAppointment.Domain.Models;
+using VetAppointment.Domain.Validators;
 using VetAppointment.Infrastructure.Generics;
 using VetAppointment.Infrastructure.Generics.GenericRepositories;
 
@@ -32,7 +33,7 @@ namespace VetAppointment.API.Controllers
         {
             var medicine = new Medicine(dto.Name, dto.PricePerUnit, dto.Stock);
             var validator = new MedicineValidator();
-            ValidationResult results = validator.Validate(medicine);
+            var results = validator.Validate(medicine);
             if (!results.IsValid)
             {
                 foreach (var failure in results.Errors)

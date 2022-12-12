@@ -6,6 +6,7 @@ using System.Reflection;
 using VetAppointment.API.DTOs.Create;
 using VetAppointment.API.DTOs.Update;
 using VetAppointment.Domain.Models;
+using VetAppointment.Domain.Validators;
 using VetAppointment.Infrastructure.Generics;
 
 namespace VetAppointment.API.Controllers
@@ -75,7 +76,7 @@ namespace VetAppointment.API.Controllers
         {
             List<Client> response = new List<Client>();
             var validator = new ClientValidator();
-            dtos.ForEach(dto =>
+            dtos.ForEach(async dto =>
             {
                 var client = new Client(dto.Name, dto.PhoneNumber, dto.EmailAddress, dto.Address, dto.MedicId);
                 ValidationResult results = validator.Validate(client);
@@ -85,11 +86,13 @@ namespace VetAppointment.API.Controllers
                     {
                         Console.WriteLine("Property " + failure.PropertyName + " failed validation. Error was: " + failure.ErrorMessage);
                     }
-                    return BadRequest(results.Errors);
                 }
-                await clientRepository.Add(client);
-            	await clientRepository.SaveChanges();
-                response.Add(client);
+                else
+                {
+                    await clientRepository.Add(client);
+                    await clientRepository.SaveChanges();
+                    response.Add(client);
+                }
             });
             return Ok(response.Select(client => Created(nameof(Get), client)));
         }

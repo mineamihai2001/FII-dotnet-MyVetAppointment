@@ -4,8 +4,10 @@ using System.Reflection;
 using VetAppointment.API.DTOs.Create;
 using VetAppointment.API.DTOs.Update;
 using VetAppointment.Domain.Models;
+using VetAppointment.Domain.Validators;
 using VetAppointment.Infrastructure.Generics;
 using VetAppointment.Infrastructure.Generics.GenericRepositories;
+using FluentValidation;
 
 namespace VetAppointment.API.Controllers
 {
@@ -33,7 +35,7 @@ namespace VetAppointment.API.Controllers
         {
             var room = new Room(dto.Type, dto.RoomNumber, dto.Capacity);
             var validator = new RoomValidator();
-            ValidationResult results = validator.Validate(room);
+            var results = validator.Validate(room);
             if (!results.IsValid)
             {
                 foreach (var failure in results.Errors)

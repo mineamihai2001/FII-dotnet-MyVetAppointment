@@ -12,6 +12,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "API", "API", "{BD49CFF0-A44D-44E9-8022-36F5C84D7FDE}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VetAppointment.API", "VetAppointment.API\VetAppointment.API.csproj", "{00016B5E-7BA2-47AE-AE42-CFD6460C38AB}"
+	ProjectSection(ProjectDependencies) = postProject
+		{1B59D83A-98E6-43E7-B116-4746DF613716} = {1B59D83A-98E6-43E7-B116-4746DF613716}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VetAppointment.Infrastructure", "VetAppointment.Infrastructure\VetAppointment.Infrastructure.csproj", "{BD2A9F32-95E5-4ACE-9F5E-F92170F3EAAF}"
 EndProject
