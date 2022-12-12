@@ -9,7 +9,7 @@ using Xunit;
 namespace VetAppointment.Tests.IntegrationTests
 {
     [TestClass]
-    public class ClientsTests:BaseClientsTests
+    public class ClientsTests:BaseIntegrationTests
     {
         [TestMethod]
         public async Task Get_WhenCalled_ReturnsOk()
