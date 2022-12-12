@@ -34,16 +34,16 @@ namespace VetAppointment.API.Controllers
         public async Task<IActionResult> GetFormatted()
         {
             var clients = await clientRepository.GetAll();
-            clients.ToList().ForEach(client => Console.WriteLine(client));
+            clients!.ToList().ForEach(client => Console.WriteLine(client));
             var result = clients.Select(async client =>
             {
-                IDictionary<string, object> temp = new ExpandoObject();
+                IDictionary<string, object> temp = new ExpandoObject()!;
                 foreach (PropertyInfo prop in client.GetType().GetProperties())
                 {
-                    temp[prop.Name] = prop.GetValue(client, null);
+                    temp[prop.Name] = prop.GetValue(client, null)!;
                 }
                 var medic = await medicRepository.GetById(client.MedicId);
-                temp["Medic"] = medic.Name;
+                temp["Medic"] = medic!.Name;
                 return temp;
             }).ToList();
             return Ok(result);
@@ -59,7 +59,7 @@ namespace VetAppointment.API.Controllers
         }
 
         [HttpPost("batch")]
-        public async Task<IActionResult> CreateFromList([FromBody] List<CreateClientDto> dtos)
+        public IActionResult CreateFromList([FromBody] List<CreateClientDto> dtos)
         {
             List<Client> response = new List<Client>();
             dtos.ForEach(async dto =>
@@ -93,10 +93,10 @@ namespace VetAppointment.API.Controllers
             {
                 var key = prop.Name;
                 var newValue = prop.GetValue(dto, null);
-                var oldValue = client.GetType().GetProperty(key).GetValue(client, null);
+                var oldValue = client.GetType().GetProperty(key)!.GetValue(client, null);
                 if (oldValue != newValue)
                 {
-                    client.GetType().GetProperty(key).SetValue(client, newValue);
+                    client.GetType().GetProperty(key)!.SetValue(client, newValue);
                 }
             }
             await clientRepository.Update(client);
@@ -119,7 +119,7 @@ namespace VetAppointment.API.Controllers
             client.RegisterPetsToClient(patients);
 
             patients.ForEach(p => patientRepository.Add(p));
-            patientRepository.SaveChanges();
+            await patientRepository.SaveChanges();
             return NoContent();
         }
     }

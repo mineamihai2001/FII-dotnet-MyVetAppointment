@@ -9,12 +9,12 @@ namespace VetAppointment.Infrastructure.Generics
 {
     public interface IRepository<T>
     {
-        Task<T> Add(T entity);
-        Task<T> Update(T entity);
-        Task<T> Delete(T entity);
-        Task<T> GetById(Guid id);
-        Task<IEnumerable<T>> GetAll();
-        Task<IEnumerable<T>> Find(Expression<Func<T, bool>> predicate);
+        Task<T?> Add(T entity);
+        Task<T?> Update(T entity);
+        Task<T?> Delete(T entity);
+        Task<T?> GetById(Guid id);
+        Task<IEnumerable<T>?> GetAll();
+        Task<IEnumerable<T>?> Find(Expression<Func<T, bool>> predicate);
         Task SaveChanges();
     }
 }

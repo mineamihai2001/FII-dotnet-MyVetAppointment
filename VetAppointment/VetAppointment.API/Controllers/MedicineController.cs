@@ -56,10 +56,10 @@ namespace VetAppointment.API.Controllers
             {
                 var key = prop.Name;
                 var newValue = prop.GetValue(dto, null);
-                var oldValue = medicine.GetType().GetProperty(key).GetValue(medicine, null);
+                var oldValue = medicine.GetType().GetProperty(key)!.GetValue(medicine, null);
                 if (oldValue != newValue)
                 {
-                    medicine.GetType().GetProperty(key).SetValue(medicine, newValue);
+                    medicine.GetType().GetProperty(key)!.SetValue(medicine, newValue);
                 }
             }
             await medicineRepository.Update(medicine);
