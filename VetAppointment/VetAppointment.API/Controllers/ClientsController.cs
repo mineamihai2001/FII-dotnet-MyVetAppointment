@@ -1,9 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using FluentValidation.Results;
+using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System.Dynamic;
 using System.Reflection;
 using VetAppointment.API.DTOs.Create;
 using VetAppointment.API.DTOs.Update;
 using VetAppointment.Domain.Models;
+using VetAppointment.Domain.Validators;
 using VetAppointment.Infrastructure.Generics;
 
 namespace VetAppointment.API.Controllers
@@ -53,6 +56,16 @@ namespace VetAppointment.API.Controllers
         public async Task<IActionResult> Create([FromBody] CreateClientDto dto)
         {
             var client = new Client(dto.Name, dto.PhoneNumber, dto.EmailAddress, dto.Address, dto.MedicId);
+            var validator = new ClientValidator();
+            ValidationResult results = validator.Validate(client);
+            if (!results.IsValid)
+            {
+                foreach (var failure in results.Errors)
+                {
+                    Console.WriteLine("Property " + failure.PropertyName + " failed validation. Error was: " + failure.ErrorMessage);
+                }
+                return BadRequest(results.Errors);
+            }
             await clientRepository.Add(client);
             await clientRepository.SaveChanges();
             return Created(nameof(Get), client);
@@ -62,12 +75,24 @@ namespace VetAppointment.API.Controllers
         public IActionResult CreateFromList([FromBody] List<CreateClientDto> dtos)
         {
             List<Client> response = new List<Client>();
+            var validator = new ClientValidator();
             dtos.ForEach(async dto =>
             {
                 var client = new Client(dto.Name, dto.PhoneNumber, dto.EmailAddress, dto.Address, dto.MedicId);
-                await clientRepository.Add(client);
-                await clientRepository.SaveChanges();
-                response.Add(client);
+                ValidationResult results = validator.Validate(client);
+                if (!results.IsValid)
+                {
+                    foreach (var failure in results.Errors)
+                    {
+                        Console.WriteLine("Property " + failure.PropertyName + " failed validation. Error was: " + failure.ErrorMessage);
+                    }
+                }
+                else
+                {
+                    await clientRepository.Add(client);
+                    await clientRepository.SaveChanges();
+                    response.Add(client);
+                }
             });
             return Ok(response.Select(client => Created(nameof(Get), client)));
         }

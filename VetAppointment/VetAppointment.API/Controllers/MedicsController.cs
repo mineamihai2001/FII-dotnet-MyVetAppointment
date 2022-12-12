@@ -5,7 +5,9 @@ using System.Reflection;
 using VetAppointment.API.DTOs.Create;
 using VetAppointment.API.DTOs.Update;
 using VetAppointment.Domain.Models;
+using VetAppointment.Domain.Validators;
 using VetAppointment.Infrastructure.Generics;
+using FluentValidation;
 
 namespace VetAppointment.API.Controllers
 {
@@ -34,6 +36,16 @@ namespace VetAppointment.API.Controllers
         public async Task<IActionResult> Create([FromBody] CreateMedicDto dto)
         {
             var medic = new Medic(dto.Name, dto.PhoneNumber, dto.EmailAddress);
+            var validator = new MedicValidator();
+            var results = validator.Validate(medic);
+            if (!results.IsValid)
+            {
+                foreach (var failure in results.Errors)
+                {
+                    Console.WriteLine("Property " + failure.PropertyName + " failed validation. Error was: " + failure.ErrorMessage);
+                }
+                return BadRequest(results.Errors);
+            }
             await medicRepository.Add(medic);
             await medicRepository.SaveChanges();
             return Created(nameof(Get), medic);

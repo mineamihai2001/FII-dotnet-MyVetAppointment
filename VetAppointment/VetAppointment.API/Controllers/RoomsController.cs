@@ -4,8 +4,10 @@ using System.Reflection;
 using VetAppointment.API.DTOs.Create;
 using VetAppointment.API.DTOs.Update;
 using VetAppointment.Domain.Models;
+using VetAppointment.Domain.Validators;
 using VetAppointment.Infrastructure.Generics;
 using VetAppointment.Infrastructure.Generics.GenericRepositories;
+using FluentValidation;
 
 namespace VetAppointment.API.Controllers
 {
@@ -32,6 +34,16 @@ namespace VetAppointment.API.Controllers
         public async Task<IActionResult> Create([FromBody] CreateRoomDto dto)
         {
             var room = new Room(dto.Type, dto.RoomNumber, dto.Capacity);
+            var validator = new RoomValidator();
+            var results = validator.Validate(room);
+            if (!results.IsValid)
+            {
+                foreach (var failure in results.Errors)
+                {
+                    Console.WriteLine("Property " + failure.PropertyName + " failed validation. Error was: " + failure.ErrorMessage);
+                }
+                return BadRequest(results.Errors);
+            }
             await roomRepository.Add(room);
             await roomRepository.SaveChanges();
             return Created(nameof(Get), room);

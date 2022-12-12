@@ -5,6 +5,7 @@ using System.Reflection;
 using VetAppointment.API.DTOs.Create;
 using VetAppointment.API.DTOs.Update;
 using VetAppointment.Domain.Models;
+using VetAppointment.Domain.Validators;
 using VetAppointment.Infrastructure.Generics;
 using VetAppointment.Infrastructure.Generics.GenericRepositories;
 
@@ -31,6 +32,16 @@ namespace VetAppointment.API.Controllers
         public async Task<IActionResult> Create([FromBody] CreateMedicineDto dto)
         {
             var medicine = new Medicine(dto.Name, dto.PricePerUnit, dto.Stock);
+            var validator = new MedicineValidator();
+            var results = validator.Validate(medicine);
+            if (!results.IsValid)
+            {
+                foreach (var failure in results.Errors)
+                {
+                    Console.WriteLine("Property " + failure.PropertyName + " failed validation. Error was: " + failure.ErrorMessage);
+                }
+                return BadRequest(results.Errors);
+            }
             await medicineRepository.Add(medicine);
             await medicineRepository.SaveChanges();
             return Created(nameof(Get), medicine);
