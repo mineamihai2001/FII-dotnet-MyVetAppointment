@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using FluentValidation.Results;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Dynamic;
 using System.Reflection;
@@ -55,6 +56,16 @@ namespace VetAppointment.API.Controllers
         public IActionResult Create([FromBody] CreateClientDto dto)
         {
             var client = new Client(dto.Name, dto.PhoneNumber, dto.EmailAddress, dto.Address, dto.MedicId);
+            var validator = new ClientValidator();
+            ValidationResult results = validator.Validate(client);
+            if (!results.IsValid)
+            {
+                foreach (var failure in results.Errors)
+                {
+                    Console.WriteLine("Property " + failure.PropertyName + " failed validation. Error was: " + failure.ErrorMessage);
+                }
+                return BadRequest(results.Errors);
+            }
             clientRepository.Add(client);
             clientRepository.SaveChanges();
             return Created(nameof(Get), client);
@@ -64,9 +75,19 @@ namespace VetAppointment.API.Controllers
         public IActionResult CreateFromList([FromBody] List<CreateClientDto> dtos)
         {
             List<Client> response = new List<Client>();
+            var validator = new ClientValidator();
             dtos.ForEach(dto =>
             {
                 var client = new Client(dto.Name, dto.PhoneNumber, dto.EmailAddress, dto.Address, dto.MedicId);
+                ValidationResult results = validator.Validate(client);
+                if (!results.IsValid)
+                {
+                    foreach (var failure in results.Errors)
+                    {
+                        Console.WriteLine("Property " + failure.PropertyName + " failed validation. Error was: " + failure.ErrorMessage);
+                    }
+                    return BadRequest(results.Errors);
+                }
                 clientRepository.Add(client);
                 clientRepository.SaveChanges();
                 response.Add(client);

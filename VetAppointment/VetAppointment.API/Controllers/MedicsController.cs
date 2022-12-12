@@ -34,6 +34,16 @@ namespace VetAppointment.API.Controllers
         public IActionResult Create([FromBody] CreateMedicDto dto)
         {
             var medic = new Medic(dto.Name, dto.PhoneNumber, dto.EmailAddress);
+            var validator = new MedicValidator();
+            ValidationResult results = validator.Validate(medic);
+            if (!results.IsValid)
+            {
+                foreach (var failure in results.Errors)
+                {
+                    Console.WriteLine("Property " + failure.PropertyName + " failed validation. Error was: " + failure.ErrorMessage);
+                }
+                return BadRequest(results.Errors);
+            }
             medicRepository.Add(medic);
             medicRepository.SaveChanges();
             return Created(nameof(Get), medic);

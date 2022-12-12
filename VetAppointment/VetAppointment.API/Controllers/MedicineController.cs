@@ -31,6 +31,16 @@ namespace VetAppointment.API.Controllers
         public ActionResult Create([FromBody] CreateMedicineDto dto)
         {
             var medicine = new Medicine(dto.Name, dto.PricePerUnit, dto.Stock);
+            var validator = new MedicineValidator();
+            ValidationResult results = validator.Validate(medicine);
+            if (!results.IsValid)
+            {
+                foreach (var failure in results.Errors)
+                {
+                    Console.WriteLine("Property " + failure.PropertyName + " failed validation. Error was: " + failure.ErrorMessage);
+                }
+                return BadRequest(results.Errors);
+            }
             medicineRepository.Add(medicine);
             medicineRepository.SaveChanges();
             return Created(nameof(Get), medicine);

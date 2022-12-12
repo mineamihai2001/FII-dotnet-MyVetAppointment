@@ -32,6 +32,16 @@ namespace VetAppointment.API.Controllers
         public ActionResult Create([FromBody] CreateRoomDto dto)
         {
             var room = new Room(dto.Type, dto.RoomNumber, dto.Capacity);
+            var validator = new RoomValidator();
+            ValidationResult results = validator.Validate(room);
+            if (!results.IsValid)
+            {
+                foreach (var failure in results.Errors)
+                {
+                    Console.WriteLine("Property " + failure.PropertyName + " failed validation. Error was: " + failure.ErrorMessage);
+                }
+                return BadRequest(results.Errors);
+            }
             roomRepository.Add(room);
             roomRepository.SaveChanges();
             return Created(nameof(Get), room);
