@@ -25,25 +25,25 @@ namespace VetAppointment.API.Controllers
         }
 
         [HttpGet]
-        public IActionResult Get()
+        public async Task<IActionResult> Get()
         {
-            return Ok(medicRepository.GetAll());
+            return Ok(await medicRepository.GetAll());
         }
 
         [HttpPost]
-        public IActionResult Create([FromBody] CreateMedicDto dto)
+        public async Task<IActionResult> Create([FromBody] CreateMedicDto dto)
         {
             var medic = new Medic(dto.Name, dto.PhoneNumber, dto.EmailAddress);
-            medicRepository.Add(medic);
-            medicRepository.SaveChanges();
+            await medicRepository.Add(medic);
+            await medicRepository.SaveChanges();
             return Created(nameof(Get), medic);
         }
 
         [HttpPost("{medicId:guid}/clients")]
-        public IActionResult RegisterClients(Guid medicId,
+        public async Task<IActionResult> RegisterClients(Guid medicId,
             [FromBody] List<CreateClientDto> dtos)
         {
-            var medic = medicRepository.GetById(medicId);
+            var medic = await medicRepository.GetById(medicId);
             if (medic == null)
             {
                 return NotFound();
@@ -55,24 +55,24 @@ namespace VetAppointment.API.Controllers
 
             clients.ForEach(c => c.AttachClientToMedic(medic));
             clients.ForEach(c => clientRepository.Add(c));
-            patientRepository.SaveChanges();
+            await patientRepository.SaveChanges();
             return NoContent();
         }
 
         [HttpDelete("{medicId:guid}")]
-        public IActionResult Delete(Guid medicId)
+        public async Task<IActionResult> Delete(Guid medicId)
         {
-            var medic = medicRepository.GetById(medicId);
+            var medic = await medicRepository.GetById(medicId);
             if (medic == null) return NotFound();
-            medicRepository.Delete(medic);
-            medicRepository.SaveChanges();
+            await medicRepository.Delete(medic);
+            await medicRepository.SaveChanges();
             return Ok("deleted");
         }
 
         [HttpPut]
-        public IActionResult Update([FromBody] UpdateMedicDto dto)
+        public async Task<IActionResult> Update([FromBody] UpdateMedicDto dto)
         {
-            var medic = medicRepository.GetById(dto.Id);
+            var medic = await medicRepository.GetById(dto.Id);
             if (medic == null) return NotFound();
 
             foreach (PropertyInfo prop in dto.GetType().GetProperties())
@@ -85,8 +85,8 @@ namespace VetAppointment.API.Controllers
                     medic.GetType().GetProperty(key).SetValue(medic, newValue);
                 }
             }
-            medicRepository.Update(medic);
-            medicRepository.SaveChanges();
+            await medicRepository.Update(medic);
+            await medicRepository.SaveChanges();
             return Created(nameof(Get), medic);
         }
     }

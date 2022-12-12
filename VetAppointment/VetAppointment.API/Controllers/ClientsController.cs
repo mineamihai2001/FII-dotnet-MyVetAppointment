@@ -1,9 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 using System.Dynamic;
 using System.Reflection;
-using System.Reflection.Metadata.Ecma335;
-//using System.Web.Http;
 using VetAppointment.API.DTOs.Create;
 using VetAppointment.API.DTOs.Update;
 using VetAppointment.Domain.Models;
@@ -27,68 +24,69 @@ namespace VetAppointment.API.Controllers
         }
 
         [HttpGet]
-        public IActionResult Get()
+        public async Task<IActionResult> Get()
         {
-            return Ok(clientRepository.GetAll());
+            return Ok(await clientRepository.GetAll());
         }
 
 
         [HttpGet("table")]
-        public IActionResult GetFormatted()
+        public async Task<IActionResult> GetFormatted()
         {
-            var clients = clientRepository.GetAll().ToList();
-            clients.ForEach(client => Console.WriteLine(client));
-            var result = clients.Select(client =>
+            var clients = await clientRepository.GetAll();
+            clients.ToList().ForEach(client => Console.WriteLine(client));
+            var result = clients.Select(async client =>
             {
                 IDictionary<string, object> temp = new ExpandoObject();
                 foreach (PropertyInfo prop in client.GetType().GetProperties())
                 {
                     temp[prop.Name] = prop.GetValue(client, null);
                 }
-                temp["Medic"] = medicRepository.GetById(client.MedicId).Name;
+                var medic = await medicRepository.GetById(client.MedicId);
+                temp["Medic"] = medic.Name;
                 return temp;
             }).ToList();
             return Ok(result);
         }
 
         [HttpPost]
-        public IActionResult Create([FromBody] CreateClientDto dto)
+        public async Task<IActionResult> Create([FromBody] CreateClientDto dto)
         {
             var client = new Client(dto.Name, dto.PhoneNumber, dto.EmailAddress, dto.Address, dto.MedicId);
-            clientRepository.Add(client);
-            clientRepository.SaveChanges();
+            await clientRepository.Add(client);
+            await clientRepository.SaveChanges();
             return Created(nameof(Get), client);
         }
 
         [HttpPost("batch")]
-        public IActionResult CreateFromList([FromBody] List<CreateClientDto> dtos)
+        public async Task<IActionResult> CreateFromList([FromBody] List<CreateClientDto> dtos)
         {
             List<Client> response = new List<Client>();
-            dtos.ForEach(dto =>
+            dtos.ForEach(async dto =>
             {
                 var client = new Client(dto.Name, dto.PhoneNumber, dto.EmailAddress, dto.Address, dto.MedicId);
-                clientRepository.Add(client);
-                clientRepository.SaveChanges();
+                await clientRepository.Add(client);
+                await clientRepository.SaveChanges();
                 response.Add(client);
             });
             return Ok(response.Select(client => Created(nameof(Get), client)));
         }
 
         [HttpDelete("{clientId:guid}")]
-        public IActionResult Delete(Guid clientId)
+        public async Task<IActionResult> Delete(Guid clientId)
         {
-            var client = clientRepository.GetById(clientId);
+            var client = await clientRepository.GetById(clientId);
             if (client == null) return NotFound();
-            clientRepository.Delete(client);
-            clientRepository.SaveChanges();
+            await clientRepository.Delete(client);
+            await clientRepository.SaveChanges();
             return Ok("deleted");
         }
 
 
         [HttpPut]
-        public IActionResult Update([FromBody] UpdateClientDto dto)
+        public async Task<IActionResult> Update([FromBody] UpdateClientDto dto)
         {
-            var client = clientRepository.GetById(dto.Id);
+            var client = await clientRepository.GetById(dto.Id);
             if (client == null) return NotFound();
 
             foreach (PropertyInfo prop in dto.GetType().GetProperties())
@@ -101,16 +99,16 @@ namespace VetAppointment.API.Controllers
                     client.GetType().GetProperty(key).SetValue(client, newValue);
                 }
             }
-            clientRepository.Update(client);
-            clientRepository.SaveChanges();
+            await clientRepository.Update(client);
+            await clientRepository.SaveChanges();
             return Created(nameof(Get), client);
         }
 
         [HttpPost("{clientId:guid}/pets")]
-        public IActionResult RegisterPets(Guid clientId,
+        public async Task<IActionResult> RegisterPets(Guid clientId,
             [FromBody] List<CreatePatientDto> dtos)
         {
-            var client = clientRepository.GetById(clientId);
+            var client = await clientRepository.GetById(clientId);
             if (client == null)
             {
                 return NotFound();
