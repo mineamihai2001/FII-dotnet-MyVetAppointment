@@ -22,13 +22,13 @@ namespace VetAppointment.API.Controllers
         }
 
         [HttpGet]
-        public ActionResult Get()
+        public async Task<IActionResult> Get()
         {
-            return Ok(medicineRepository.GetAll());
+            return Ok(await medicineRepository.GetAll());
         }
 
         [HttpPost]
-        public ActionResult Create([FromBody] CreateMedicineDto dto)
+        public async Task<IActionResult> Create([FromBody] CreateMedicineDto dto)
         {
             var medicine = new Medicine(dto.Name, dto.PricePerUnit, dto.Stock);
             var validator = new MedicineValidator();
@@ -41,39 +41,39 @@ namespace VetAppointment.API.Controllers
                 }
                 return BadRequest(results.Errors);
             }
-            medicineRepository.Add(medicine);
-            medicineRepository.SaveChanges();
+            await medicineRepository.Add(medicine);
+            await medicineRepository.SaveChanges();
             return Created(nameof(Get), medicine);
         }
 
         [HttpDelete("{medicineId:guid}")]
-        public IActionResult Delete(Guid medicineId)
+        public async Task<IActionResult> Delete(Guid medicineId)
         {
-            var medicine = medicineRepository.GetById(medicineId);
+            var medicine = await medicineRepository.GetById(medicineId);
             if (medicine == null) return NotFound();
-            medicineRepository.Delete(medicine);
-            medicineRepository.SaveChanges();
+            await medicineRepository.Delete(medicine);
+            await medicineRepository.SaveChanges();
             return Ok("deleted");
         }
 
         [HttpPut]
-        public IActionResult Update([FromBody] UpdateMedicineDto dto)
+        public async Task<IActionResult> Update([FromBody] UpdateMedicineDto dto)
         {
-            var medicine = medicineRepository.GetById(dto.Id);
+            var medicine = await medicineRepository.GetById(dto.Id);
             if (medicine == null) return NotFound();
 
             foreach (PropertyInfo prop in dto.GetType().GetProperties())
             {
                 var key = prop.Name;
                 var newValue = prop.GetValue(dto, null);
-                var oldValue = medicine.GetType().GetProperty(key).GetValue(medicine, null);
+                var oldValue = medicine.GetType().GetProperty(key)!.GetValue(medicine, null);
                 if (oldValue != newValue)
                 {
-                    medicine.GetType().GetProperty(key).SetValue(medicine, newValue);
+                    medicine.GetType().GetProperty(key)!.SetValue(medicine, newValue);
                 }
             }
-            medicineRepository.Update(medicine);
-            medicineRepository.SaveChanges();
+            await medicineRepository.Update(medicine);
+            await medicineRepository.SaveChanges();
             return Created(nameof(Get), medicine);
         }
 

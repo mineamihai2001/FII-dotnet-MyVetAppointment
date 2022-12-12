@@ -23,13 +23,13 @@ namespace VetAppointment.API.Controllers
         }
 
         [HttpGet]
-        public ActionResult Get()
+        public async Task<IActionResult> Get()
         {
-            return Ok(roomRepository.GetAll());
+            return Ok(await roomRepository.GetAll());
         }
 
         [HttpPost]
-        public ActionResult Create([FromBody] CreateRoomDto dto)
+        public async Task<IActionResult> Create([FromBody] CreateRoomDto dto)
         {
             var room = new Room(dto.Type, dto.RoomNumber, dto.Capacity);
             var validator = new RoomValidator();
@@ -42,39 +42,39 @@ namespace VetAppointment.API.Controllers
                 }
                 return BadRequest(results.Errors);
             }
-            roomRepository.Add(room);
-            roomRepository.SaveChanges();
+            await roomRepository.Add(room);
+            await roomRepository.SaveChanges();
             return Created(nameof(Get), room);
         }
 
         [HttpDelete("{roomId:guid}")]
-        public IActionResult Delete(Guid roomId)
+        public async Task<IActionResult> Delete(Guid roomId)
         {
-            var room = roomRepository.GetById(roomId);
+            var room = await roomRepository.GetById(roomId);
             if (room == null) return NotFound();
-            roomRepository.Delete(room);
-            roomRepository.SaveChanges();
+            await roomRepository.Delete(room);
+            await roomRepository.SaveChanges();
             return Ok("deleted");
         }
 
         [HttpPut]
-        public IActionResult Update([FromBody] UpdateRoomDto dto)
+        public async Task<IActionResult> Update([FromBody] UpdateRoomDto dto)
         {
-            var room = roomRepository.GetById(dto.Id);
+            var room = await roomRepository.GetById(dto.Id);
             if (room == null) return NotFound();
 
             foreach (PropertyInfo prop in dto.GetType().GetProperties())
             {
                 var key = prop.Name;
                 var newValue = prop.GetValue(dto, null);
-                var oldValue = room.GetType().GetProperty(key).GetValue(room, null);
+                var oldValue = room.GetType().GetProperty(key)!.GetValue(room, null);
                 if (oldValue != newValue)
                 {
-                    room.GetType().GetProperty(key).SetValue(room, newValue);
+                    room.GetType().GetProperty(key)!.SetValue(room, newValue);
                 }
             }
-            roomRepository.Update(room);
-            roomRepository.SaveChanges();
+            await roomRepository.Update(room);
+            await roomRepository.SaveChanges();
             return Created(nameof(Get), room);
         }
     }
