@@ -8,6 +8,7 @@ using VetAppointment.Domain.Validators;
 using VetAppointment.Infrastructure.Generics;
 using VetAppointment.Infrastructure.Generics.GenericRepositories;
 using FluentValidation;
+using AutoMapper;
 
 namespace VetAppointment.API.Controllers
 {
@@ -17,11 +18,13 @@ namespace VetAppointment.API.Controllers
     {
         private readonly IRepository<Room> roomRepository;
         private readonly IRepository<Appointment> appointmentRepository;
+        private readonly IMapper mapper;
 
-        public RoomsController(IRepository<Room> roomRepository, IRepository<Appointment> appointmentRepository)
+        public RoomsController(IRepository<Room> roomRepository, IRepository<Appointment> appointmentRepository, IMapper mapper)
         {
             this.roomRepository = roomRepository;
             this.appointmentRepository = appointmentRepository;
+            this.mapper = mapper;
         }
 
         [HttpGet]

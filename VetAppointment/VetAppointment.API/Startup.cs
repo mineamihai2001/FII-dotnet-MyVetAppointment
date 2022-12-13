@@ -4,6 +4,8 @@ using VetAppointment.Domain.Models;
 using VetAppointment.Infrastructure;
 using VetAppointment.Infrastructure.Generics;
 using VetAppointment.Infrastructure.Generics.GenericRepositories;
+using VetAppointment.API.Helpers;
+using AutoMapper;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,6 +28,7 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
 
 //builder.Services.AddScoped<DatabaseContext>();
 builder.Services.AddDbContext<DatabaseContext>(

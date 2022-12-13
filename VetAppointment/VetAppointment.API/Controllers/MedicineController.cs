@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Dynamic;
 using System.Reflection;
@@ -16,10 +17,12 @@ namespace VetAppointment.API.Controllers
     public class MedicineController : ControllerBase
     {
         private readonly IRepository<Medicine> medicineRepository;
+        private readonly IMapper mapper;
 
-        public MedicineController(IRepository<Medicine> medicineRepository)
+        public MedicineController(IRepository<Medicine> medicineRepository, IMapper mapper)
         {
             this.medicineRepository = medicineRepository;
+            this.mapper = mapper;
         }
 
         [HttpGet]

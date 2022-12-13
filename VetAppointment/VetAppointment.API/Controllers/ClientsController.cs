@@ -1,4 +1,5 @@
-﻿using FluentValidation.Results;
+﻿using AutoMapper;
+using FluentValidation.Results;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Dynamic;
@@ -18,12 +19,14 @@ namespace VetAppointment.API.Controllers
         private readonly IRepository<Client> clientRepository;
         private readonly IRepository<Patient> patientRepository;
         private readonly IRepository<Medic> medicRepository;
+        private readonly IMapper mapper;
 
-        public ClientsController(IRepository<Client> clientRepository, IRepository<Patient> patientRepository, IRepository<Medic> medicRepository)
+        public ClientsController(IRepository<Client> clientRepository, IRepository<Patient> patientRepository, IRepository<Medic> medicRepository, IMapper mapper)
         {
             this.clientRepository = clientRepository;
             this.medicRepository = medicRepository;
             this.patientRepository = patientRepository;
+            this.mapper = mapper;
         }
 
         [HttpGet]
