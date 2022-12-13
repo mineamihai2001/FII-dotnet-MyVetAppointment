@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
-using System.Net.Http;
 using VetAppointment.API.Controllers;
 using VetAppointment.Infrastructure;
 
@@ -16,11 +14,10 @@ namespace VetAppointment.Tests.IntegrationTests
 
         protected BaseIntegrationTests()
         {
-            var application = new WebApplicationFactory<ClientsController>()
+            var application = new WebApplicationFactory<MedicsController>()
                 .WithWebHostBuilder(builder => { });
             HttpClient = application.CreateClient();
             databaseContext = new DatabaseContext(options);
-            CleanDatabases();
         }
 
         protected void CleanDatabases()

@@ -6,10 +6,10 @@ using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace VetAppointment.Tests.IntegrationTests
+namespace VetAppointment.Tests
 {
     [TestClass]
-    public class ClientsTests:BaseIntegrationTests
+    public class ClientsTests : BaseIntegrationTests
     {
         [TestMethod]
         public async Task Get_WhenCalled_ReturnsOk()
