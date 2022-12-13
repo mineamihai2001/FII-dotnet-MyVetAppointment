@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using VetAppointment.API.DTOs;
 using VetAppointment.Domain.Models;
 using VetAppointment.Infrastructure.Generics;
@@ -11,10 +12,12 @@ namespace VetAppointment.API.Controllers
     public class BillsController : Controller
     {
         private readonly IRepository<Bill> billRepository;
+        private readonly IMapper mapper;
 
-        public BillsController(IRepository<Bill> billRepository)
+        public BillsController(IRepository<Bill> billRepository, IMapper mapper)
         {
             this.billRepository=billRepository;
+            this.mapper=mapper;
         }
 
         [HttpGet]
