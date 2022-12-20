@@ -6,6 +6,7 @@ using VetAppointment.Infrastructure.Generics;
 using VetAppointment.Infrastructure.Generics.GenericRepositories;
 using VetAppointment.API.Helpers;
 using AutoMapper;
+using VetAppointment.Application;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,21 +30,23 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
+builder.Services.AddApplicationService();
+builder.Services.AddInfrastructureServices(builder.Configuration);
 
-//builder.Services.AddScoped<DatabaseContext>();
-builder.Services.AddDbContext<DatabaseContext>(
-    options => options.UseSqlite(
-        builder.Configuration.GetConnectionString("VetAppointmentDB"),
-    b => b.MigrationsAssembly(typeof(DatabaseContext).Assembly.FullName)));
+//!!!!Am comentat liniile de mai jos deoarece am refactorizat mecanismul de Dependecy Injection
+//builder.Services.AddDbContext<DatabaseContext>(
+//    options => options.UseSqlite(
+//       builder.Configuration.GetConnectionString("VetAppointmentDB"),
+//       b => b.MigrationsAssembly(typeof(DatabaseContext).Assembly.FullName)));
 
-builder.Services.AddScoped<IRepository<Appointment>, AppointmentRepository>();
-builder.Services.AddScoped<IRepository<Bill>, BillRepository>();
-builder.Services.AddScoped<IRepository<Client>, ClientRepository>();
-builder.Services.AddScoped<IRepository<Medicine>, MedicineRepository>();
-builder.Services.AddScoped<IRepository<Medic>, MedicRepository>();
-builder.Services.AddScoped<IRepository<Nurse>, NurseRepository>();
-builder.Services.AddScoped<IRepository<Patient>, PatientRepository>();
-builder.Services.AddScoped<IRepository<Room>, RoomRepository>();
+//builder.Services.AddScoped<IRepository<Appointment>, AppointmentRepository>();
+//builder.Services.AddScoped<IRepository<Bill>, BillRepository>();
+//builder.Services.AddScoped<IRepository<Client>, ClientRepository>();
+//builder.Services.AddScoped<IRepository<Medicine>, MedicineRepository>();
+//builder.Services.AddScoped<IRepository<Medic>, MedicRepository>();
+//builder.Services.AddScoped<IRepository<Nurse>, NurseRepository>();
+//builder.Services.AddScoped<IRepository<Patient>, PatientRepository>();
+//builder.Services.AddScoped<IRepository<Room>, RoomRepository>();
 
 var app = builder.Build();
 

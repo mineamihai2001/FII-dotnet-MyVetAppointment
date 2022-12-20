@@ -29,7 +29,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{61B5C913
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VetAppointment.IntegrationTests", "VetAppointment.IntegrationTests\VetAppointment.IntegrationTests.csproj", "{4FDB2389-2D5E-491D-9E5D-97F50F60E02D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VetAppointment.Tests", "Tests\VetAppointment.Tests.csproj", "{13DBD232-A732-43D8-818B-0A0B1807C8F8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VetAppointment.UnitTests", "Tests\VetAppointment.UnitTests.csproj", "{13DBD232-A732-43D8-818B-0A0B1807C8F8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
