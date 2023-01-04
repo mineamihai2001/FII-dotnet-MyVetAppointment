@@ -30,6 +30,12 @@ namespace VetAppointment.API.Controllers
             return Ok(await medicRepository.GetAll());
         }
 
+        [HttpGet("{medicId:guid}")]
+        public async Task<IActionResult> GetById(Guid medicId)
+        {
+            return Ok(await medicRepository.GetById(medicId));
+        }
+
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateMedicDto dto)
         {
