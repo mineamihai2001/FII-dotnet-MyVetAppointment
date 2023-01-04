@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using VetAppointment.Infrastructure;
 
@@ -10,9 +11,11 @@ using VetAppointment.Infrastructure;
 namespace VetAppointment.Infrastructure.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20230104195242_Restructure")]
+    partial class Restructure
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.1");
@@ -69,7 +72,7 @@ namespace VetAppointment.Infrastructure.Migrations
                     b.Property<DateTime>("BillingDate")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("ClientId")
+                    b.Property<Guid>("ClientId")
                         .HasColumnType("TEXT");
 
                     b.Property<double>("PaymentSum")
@@ -288,13 +291,13 @@ namespace VetAppointment.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("VetAppointment.Domain.Models.Client", "Client")
+                    b.HasOne("VetAppointment.Domain.Models.Client", null)
                         .WithMany("Billings")
-                        .HasForeignKey("ClientId");
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Appointment");
-
-                    b.Navigation("Client");
                 });
 
             modelBuilder.Entity("VetAppointment.Domain.Models.Client", b =>
