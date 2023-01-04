@@ -77,7 +77,8 @@ namespace VetAppointment.Tests
                 new Bill(
                 DateTime.Parse(dateInput),
                 "Billing for the appointment",
-                250
+                250,
+                Guid.NewGuid()
                 )
             };
 

@@ -1,7 +1,10 @@
 ﻿using AutoMapper;
+using FluentValidation.Results;
 using Microsoft.AspNetCore.Mvc;
 using VetAppointment.API.DTOs;
+using VetAppointment.API.DTOs.Create;
 using VetAppointment.Domain.Models;
+using VetAppointment.Domain.Validators;
 using VetAppointment.Infrastructure.Generics;
 using VetAppointment.Infrastructure.Generics.GenericRepositories;
 
@@ -26,5 +29,23 @@ namespace VetAppointment.API.Controllers
             return Ok(billRepository.GetAll().Result);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> Create([FromBody] CreateBillDto dto)
+        {
+            var bill = new Bill(dto.BillingDate, dto.Summary, dto.PaymentSum, dto.AppointmentId);
+            var validator = new BillValidator();
+            ValidationResult results = validator.Validate(bill);
+            if (!results.IsValid)
+            {
+                foreach (var failure in results.Errors)
+                {
+                    Console.WriteLine("Property " + failure.PropertyName + " failed validation. Error was: " + failure.ErrorMessage);
+                }
+                return BadRequest(results.Errors);
+            }
+            await billRepository.Add(bill);
+            await billRepository.SaveChanges();
+            return Created(nameof(Get), bill);
+        }
     }
 }
