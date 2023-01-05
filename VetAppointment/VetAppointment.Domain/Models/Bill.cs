@@ -16,7 +16,7 @@
 		public DateTime BillingDate { get; private set; }
 		public string Summary { get; private set; }
 		public double PaymentSum { get; private set; }
-		public Appointment Appointment { get; private set; }
+		public Appointment? Appointment { get; private set; }
 		public Guid AppointmentId { get; private set; }
 		public Client? Client { get; private set; }
         public List<Medicine> Prescription { get; private set; } = new List<Medicine>();

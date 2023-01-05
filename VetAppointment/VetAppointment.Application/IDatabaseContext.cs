@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using VetAppointment.Domain.Models;
+using VetAppointment.Domain.Models.AuthenticationModels;
 
 namespace VetAppointment.Application
 {
@@ -13,6 +14,7 @@ namespace VetAppointment.Application
         DbSet<Room> Rooms { get; }
         DbSet<Bill> Bills { get; }
         DbSet<Appointment> Appointments { get; }
+        DbSet<User> Users { get; }
 
         void Save();
     }
