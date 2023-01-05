@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using VetAppointment.Domain.Models;
+using VetAppointment.Domain.Models.AuthenticationModels;
 using VetAppointment.Infrastructure.Generics;
 using VetAppointment.Infrastructure.Generics.GenericRepositories;
 
@@ -20,6 +21,7 @@ namespace VetAppointment.Infrastructure
             services.AddScoped<IRepository<Nurse>, NurseRepository>();
             services.AddScoped<IRepository<Patient>, PatientRepository>();
             services.AddScoped<IRepository<Room>, RoomRepository>();
+            services.AddScoped<IRepository<User>, UserRepository>();
             services.AddDbContext<DatabaseContext>(options => options.UseSqlite(
                 configuration.GetConnectionString("VetAppointmentDB")), ServiceLifetime.Singleton);
             return services;
