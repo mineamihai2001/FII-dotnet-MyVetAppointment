@@ -51,6 +51,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                     };
                 });
 
+builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
+
 //!!!!Am comentat liniile de mai jos deoarece am refactorizat mecanismul de Dependecy Injection
 //builder.Services.AddDbContext<DatabaseContext>(
 //    options => options.UseSqlite(
