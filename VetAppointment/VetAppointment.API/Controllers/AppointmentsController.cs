@@ -35,9 +35,9 @@ namespace VetAppointment.API.Controllers
         }
 
         [HttpGet]
-        public ActionResult Get()
+        public async Task<ActionResult> Get()
         {
-            return Ok(appointmentRepository.GetAll().Result);
+            return Ok(await appointmentRepository.GetAll());
         }
 
         [HttpGet("{appointmentId:guid}")]
@@ -49,7 +49,15 @@ namespace VetAppointment.API.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateAppointmentDto dto)
         {
+            var medic = await medicRepository.GetById(dto.MedicId);
+            if (medic == null)
+            {
+                return NotFound("Medicul nu exista!");
+            }
+
             var appointment = new Appointment(dto.Type, dto.StartDate, dto.EndDate, dto.Description);
+            appointment.AttachAppointmentToMedic(medic);
+            medic.RegisterAppointmentsToMedic(new List<Appointment>() { appointment });
             var validator = new AppointmentValidator();
             ValidationResult results = validator.Validate(appointment);
             if (!results.IsValid)
@@ -62,6 +70,7 @@ namespace VetAppointment.API.Controllers
             }
             await appointmentRepository.Add(appointment);
             await appointmentRepository.SaveChanges();
+            await medicRepository.SaveChanges();
             return Created(nameof(Get), appointment);
         }
 
@@ -72,20 +81,32 @@ namespace VetAppointment.API.Controllers
             var validator = new AppointmentValidator();
             dtos.ForEach(async dto =>
             {
-                var appointment = new Appointment(dto.Type, dto.StartDate, dto.EndDate, dto.Description);
-                ValidationResult results = validator.Validate(appointment);
-                if (!results.IsValid)
+
+                var medic = await medicRepository.GetById(dto.MedicId);
+                if (medic == null)
                 {
-                    foreach (var failure in results.Errors)
-                    {
-                        Console.WriteLine("Property " + failure.PropertyName + " failed validation. Error was: " + failure.ErrorMessage);
-                    }
+                    Console.WriteLine("Medicul" + dto.MedicId + "doesn't exist!");
                 }
                 else
                 {
-                    await appointmentRepository.Add(appointment);
-                    await appointmentRepository.SaveChanges();
-                    response.Add(appointment);
+                    var appointment = new Appointment(dto.Type, dto.StartDate, dto.EndDate, dto.Description);
+                    appointment.AttachAppointmentToMedic(medic);
+                    medic.RegisterAppointmentsToMedic(new List<Appointment>() { appointment });
+                    ValidationResult results = validator.Validate(appointment);
+                    if (!results.IsValid)
+                    {
+                        foreach (var failure in results.Errors)
+                        {
+                            Console.WriteLine("Property " + failure.PropertyName + " failed validation. Error was: " + failure.ErrorMessage);
+                        }
+                    }
+                    else
+                    {
+                        await appointmentRepository.Add(appointment);
+                        await appointmentRepository.SaveChanges();
+                        await medicRepository.SaveChanges();
+                        response.Add(appointment);
+                    }
                 }
             });
             return Ok(response.Select(appointment => Created(nameof(Get), appointment)));
