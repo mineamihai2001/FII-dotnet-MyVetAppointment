@@ -9,6 +9,7 @@ using VetAppointment.API.DTOs.Authenticate;
 using VetAppointment.Domain.Models;
 using VetAppointment.Domain.Models.AuthenticationModels;
 using VetAppointment.Infrastructure.Generics;
+using VetAppointment.Infrastructure.Generics.GenericFilters;
 using VetAppointment.Infrastructure.Generics.GenericRepositories;
 
 namespace VetAppointment.API.Controllers
@@ -36,7 +37,8 @@ namespace VetAppointment.API.Controllers
         [HttpPost("/login")]
         public async Task<IActionResult> Login([FromBody] UserLoginDto dto)
         {
-            var user = await userRepository.GetByUsernameAndPassword(dto.Username, dto.Password);
+            var filterUser = new FilterUser(dto.Username, dto.Password);
+            var user = userRepository.Select(filterUser);
 
             if (user != null) {
                 var token = Generate(user);
