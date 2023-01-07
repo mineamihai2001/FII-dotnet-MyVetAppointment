@@ -50,19 +50,9 @@ namespace VetAppointment.Infrastructure.Generics
             return await context.FindAsync<T>(id);
         }
 
-        public async Task<T?> GetByUsername(string username)
+        public T? Select(IFilter<T> filterClass)
         {
-            return await context.FindAsync<T>(username);
-        }
-
-        public async Task<T?> GetByEmail(string email)
-        {
-            return await context.FindAsync<T>(email);
-        }
-
-        public async Task<T?> GetByUsernameAndPassword(string username, string password)
-        {
-            return await context.FindAsync<T>(username, password);
+            return filterClass.Filter(context.Set<T>().AsQueryable());
         }
 
         public async Task SaveChanges()

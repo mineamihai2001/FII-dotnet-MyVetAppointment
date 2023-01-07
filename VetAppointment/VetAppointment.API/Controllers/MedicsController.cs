@@ -9,6 +9,8 @@ using VetAppointment.Domain.Validators;
 using VetAppointment.Infrastructure.Generics;
 using FluentValidation;
 using AutoMapper;
+using System.Data;
+using VetAppointment.Infrastructure.Generics.GenericRepositories;
 
 namespace VetAppointment.API.Controllers
 {
@@ -39,6 +41,19 @@ namespace VetAppointment.API.Controllers
         public async Task<IActionResult> GetById(Guid medicId)
         {
             return Ok(await medicRepository.GetById(medicId));
+        }
+
+        [HttpGet("{medicId:guid}/appointments")]
+        [Authorize(Roles = "Medic")]
+        public async Task<IActionResult> GetAppointmenstForMedic(Guid medicId)
+        {
+            var medic = await medicRepository.GetById(medicId);
+            if (medic == null)
+            {
+                return NotFound("Medic not found!");
+            }
+            IEnumerable<Appointment> appointments = await appointmentRepository.GetAll();
+            return Ok(appointments.ToList().FindAll(a => a.Medic == medic));
         }
 
         [HttpPost]
@@ -77,6 +92,28 @@ namespace VetAppointment.API.Controllers
             clients.ForEach(c => c.AttachClientToMedic(medic));
             clients.ForEach(c => clientRepository.Add(c));
             await patientRepository.SaveChanges();
+            return NoContent();
+        }
+
+        [HttpPost("{medicId:guid}/appointments")]
+        [Authorize(Roles = "Medic")]
+        public async Task<IActionResult> RegisterAppointments(Guid medicId,
+            [FromBody] List<CreateAppointmentForMedicDto> dtos)
+        {
+            var medic = await medicRepository.GetById(medicId);
+            if (medic == null)
+            {
+                return NotFound();
+            }
+
+            List<Appointment> appointments = dtos.Select(d => new Appointment(d.Type, d.StartDate, d.EndDate, d.Description)).ToList();
+
+            medic.RegisterAppointmentsToMedic(appointments);
+
+            appointments.ForEach(a => a.AttachAppointmentToMedic(medic));
+            appointments.ForEach(a => appointmentRepository.Add(a));
+            await appointmentRepository.SaveChanges();
+            await medicRepository.SaveChanges();
             return NoContent();
         }
 
