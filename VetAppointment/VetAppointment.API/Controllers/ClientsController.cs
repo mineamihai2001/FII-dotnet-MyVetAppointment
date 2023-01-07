@@ -35,6 +35,11 @@ namespace VetAppointment.API.Controllers
             return Ok(await clientRepository.GetAll());
         }
 
+        [HttpGet("{clientId:guid}")]
+        public async Task<IActionResult> GetById(Guid clientId)
+        {
+            return Ok(await clientRepository.GetById(clientId));
+        }
 
         [HttpGet("table")]
         public async Task<IActionResult> GetFormatted()
