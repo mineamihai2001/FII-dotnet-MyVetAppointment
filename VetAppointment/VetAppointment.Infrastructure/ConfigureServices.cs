@@ -23,7 +23,7 @@ namespace VetAppointment.Infrastructure
             services.AddScoped<IRepository<Room>, RoomRepository>();
             services.AddScoped<IRepository<User>, UserRepository>();
             services.AddDbContext<DatabaseContext>(options => options.UseSqlite(
-                configuration.GetConnectionString("VetAppointmentDB")), ServiceLifetime.Singleton);
+                configuration.GetConnectionString("VetAppointmentDB")), ServiceLifetime.Transient); //ServiceLifetime.Singleton
             return services;
         }
     }
