@@ -13,6 +13,7 @@ namespace VetAppointment.Infrastructure.Generics
         Task<T?> Update(T entity);
         Task<T?> Delete(T entity);
         Task<T?> GetById(Guid id);
+        T? Select(IFilter<T> filterClass);
         Task<IEnumerable<T>?> GetAll();
         Task<IEnumerable<T>?> Find(Expression<Func<T, bool>> predicate);
         Task SaveChanges();

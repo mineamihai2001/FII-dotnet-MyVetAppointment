@@ -21,8 +21,8 @@ namespace VetAppointment.Domain.Models
         public bool Gender { get; private set; }
         public double Weight { get; private set; }
         public DateTime BirthDate { get; private set; }
-        public Guid OwnerId { get; private set; }
-        public Guid MedicId { get; private set; }
+        public Guid? OwnerId { get; private set; }
+        public Guid? MedicId { get; private set; }
         public List<Appointment> Appointments { get; private set; } = new List<Appointment>();
 
         public void AttachPetToOwner(Client client)

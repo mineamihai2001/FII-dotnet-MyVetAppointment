@@ -12,7 +12,6 @@ namespace VetAppointment.Domain.Validators
             RuleFor(x => x.EmailAddress).EmailAddress(
                 FluentValidation.Validators.EmailValidationMode.AspNetCoreCompatible)
                     .WithMessage("Please enter a valid email address");
-            RuleForEach(x => x.Clients).SetValidator(new ClientValidator());
             RuleForEach(x => x.Patients).SetValidator(new PatientValidator());
         }
     }

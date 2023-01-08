@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Dynamic;
 using System.Reflection;
+using Microsoft.AspNetCore.Authorization;
 using VetAppointment.API.DTOs.Create;
 using VetAppointment.API.DTOs.Update;
 using VetAppointment.Domain.Models;
@@ -35,6 +36,11 @@ namespace VetAppointment.API.Controllers
             return Ok(await clientRepository.GetAll());
         }
 
+        [HttpGet("{clientId:guid}")]
+        public async Task<IActionResult> GetById(Guid clientId)
+        {
+            return Ok(await clientRepository.GetById(clientId));
+        }
 
         [HttpGet("table")]
         public async Task<IActionResult> GetFormatted()
@@ -48,8 +54,6 @@ namespace VetAppointment.API.Controllers
                 {
                     temp[prop.Name] = prop.GetValue(client, null)!;
                 }
-                var medic = await medicRepository.GetById(client.MedicId);
-                temp["Medic"] = medic!.Name;
                 return temp;
             }).ToList();
             return Ok(result);
@@ -58,7 +62,7 @@ namespace VetAppointment.API.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateClientDto dto)
         {
-            var client = new Client(dto.Name, dto.PhoneNumber, dto.EmailAddress, dto.Address, dto.MedicId);
+            var client = new Client(dto.Name, dto.PhoneNumber, dto.EmailAddress, dto.Address);
             var validator = new ClientValidator();
             ValidationResult results = validator.Validate(client);
             if (!results.IsValid)
@@ -81,7 +85,7 @@ namespace VetAppointment.API.Controllers
             var validator = new ClientValidator();
             dtos.ForEach(async dto =>
             {
-                var client = new Client(dto.Name, dto.PhoneNumber, dto.EmailAddress, dto.Address, dto.MedicId);
+                var client = new Client(dto.Name, dto.PhoneNumber, dto.EmailAddress, dto.Address);
                 ValidationResult results = validator.Validate(client);
                 if (!results.IsValid)
                 {

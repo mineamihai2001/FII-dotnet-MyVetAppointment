@@ -15,7 +15,7 @@ namespace VetAppointment.Infrastructure.Migrations
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "7.0.0");
+            modelBuilder.HasAnnotation("ProductVersion", "7.0.1");
 
             modelBuilder.Entity("VetAppointment.Domain.Models.Appointment", b =>
                 {
@@ -23,7 +23,7 @@ namespace VetAppointment.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("BillId")
+                    b.Property<Guid?>("ClientId")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
@@ -33,13 +33,13 @@ namespace VetAppointment.Infrastructure.Migrations
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("MedicId")
+                    b.Property<Guid?>("MedicId")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("PatientId")
+                    b.Property<Guid?>("PatientId")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("RoomId")
+                    b.Property<Guid?>("RoomId")
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("StartDate")
@@ -51,6 +51,8 @@ namespace VetAppointment.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ClientId");
+
                     b.HasIndex("MedicId");
 
                     b.HasIndex("PatientId");
@@ -58,6 +60,32 @@ namespace VetAppointment.Infrastructure.Migrations
                     b.HasIndex("RoomId");
 
                     b.ToTable("Appointments");
+                });
+
+            modelBuilder.Entity("VetAppointment.Domain.Models.AuthenticationModels.User", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("EmailAddress")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("MedicId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("VetAppointment.Domain.Models.Bill", b =>
@@ -72,7 +100,7 @@ namespace VetAppointment.Infrastructure.Migrations
                     b.Property<DateTime>("BillingDate")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("ClientId")
+                    b.Property<Guid?>("ClientId")
                         .HasColumnType("TEXT");
 
                     b.Property<double>("PaymentSum")
@@ -83,6 +111,9 @@ namespace VetAppointment.Infrastructure.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AppointmentId")
+                        .IsUnique();
 
                     b.HasIndex("ClientId");
 
@@ -103,9 +134,6 @@ namespace VetAppointment.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("MedicId")
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -115,8 +143,6 @@ namespace VetAppointment.Infrastructure.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("MedicId");
 
                     b.ToTable("Clients");
                 });
@@ -208,14 +234,14 @@ namespace VetAppointment.Infrastructure.Migrations
                     b.Property<bool>("Gender")
                         .HasColumnType("INTEGER");
 
-                    b.Property<Guid>("MedicId")
+                    b.Property<Guid?>("MedicId")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("OwnerId")
+                    b.Property<Guid?>("OwnerId")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Race")
@@ -261,41 +287,46 @@ namespace VetAppointment.Infrastructure.Migrations
 
             modelBuilder.Entity("VetAppointment.Domain.Models.Appointment", b =>
                 {
-                    b.HasOne("VetAppointment.Domain.Models.Medic", null)
+                    b.HasOne("VetAppointment.Domain.Models.Client", "Client")
                         .WithMany("Appointments")
-                        .HasForeignKey("MedicId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ClientId");
 
-                    b.HasOne("VetAppointment.Domain.Models.Patient", null)
+                    b.HasOne("VetAppointment.Domain.Models.Medic", "Medic")
                         .WithMany("Appointments")
-                        .HasForeignKey("PatientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("MedicId");
 
-                    b.HasOne("VetAppointment.Domain.Models.Room", null)
+                    b.HasOne("VetAppointment.Domain.Models.Patient", "Patient")
                         .WithMany("Appointments")
-                        .HasForeignKey("RoomId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("PatientId");
+
+                    b.HasOne("VetAppointment.Domain.Models.Room", "Room")
+                        .WithMany("Appointments")
+                        .HasForeignKey("RoomId");
+
+                    b.Navigation("Client");
+
+                    b.Navigation("Medic");
+
+                    b.Navigation("Patient");
+
+                    b.Navigation("Room");
                 });
 
             modelBuilder.Entity("VetAppointment.Domain.Models.Bill", b =>
                 {
-                    b.HasOne("VetAppointment.Domain.Models.Client", null)
-                        .WithMany("Billings")
-                        .HasForeignKey("ClientId")
+                    b.HasOne("VetAppointment.Domain.Models.Appointment", "Appointment")
+                        .WithOne("Bill")
+                        .HasForeignKey("VetAppointment.Domain.Models.Bill", "AppointmentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
 
-            modelBuilder.Entity("VetAppointment.Domain.Models.Client", b =>
-                {
-                    b.HasOne("VetAppointment.Domain.Models.Medic", null)
-                        .WithMany("Clients")
-                        .HasForeignKey("MedicId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.HasOne("VetAppointment.Domain.Models.Client", "Client")
+                        .WithMany("Billings")
+                        .HasForeignKey("ClientId");
+
+                    b.Navigation("Appointment");
+
+                    b.Navigation("Client");
                 });
 
             modelBuilder.Entity("VetAppointment.Domain.Models.Medicine", b =>
@@ -313,9 +344,12 @@ namespace VetAppointment.Infrastructure.Migrations
 
                     b.HasOne("VetAppointment.Domain.Models.Medic", null)
                         .WithMany("Patients")
-                        .HasForeignKey("MedicId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("MedicId");
+                });
+
+            modelBuilder.Entity("VetAppointment.Domain.Models.Appointment", b =>
+                {
+                    b.Navigation("Bill");
                 });
 
             modelBuilder.Entity("VetAppointment.Domain.Models.Bill", b =>
@@ -325,6 +359,8 @@ namespace VetAppointment.Infrastructure.Migrations
 
             modelBuilder.Entity("VetAppointment.Domain.Models.Client", b =>
                 {
+                    b.Navigation("Appointments");
+
                     b.Navigation("Billings");
 
                     b.Navigation("Pets");
@@ -333,8 +369,6 @@ namespace VetAppointment.Infrastructure.Migrations
             modelBuilder.Entity("VetAppointment.Domain.Models.Medic", b =>
                 {
                     b.Navigation("Appointments");
-
-                    b.Navigation("Clients");
 
                     b.Navigation("Patients");
                 });

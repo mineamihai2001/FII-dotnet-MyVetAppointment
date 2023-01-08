@@ -50,6 +50,11 @@ namespace VetAppointment.Infrastructure.Generics
             return await context.FindAsync<T>(id);
         }
 
+        public T? Select(IFilter<T> filterClass)
+        {
+            return filterClass.Filter(context.Set<T>().AsQueryable());
+        }
+
         public async Task SaveChanges()
         {
             await context.SaveChangesAsync();
