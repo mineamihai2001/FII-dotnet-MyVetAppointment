@@ -9,6 +9,7 @@ namespace VetAppointment.Infrastructure.Services
     public class CustomEmailService
     {
         private readonly IConfiguration appSettings;
+
         public CustomEmailService(IConfiguration appSettings)
         {
             this.appSettings = appSettings;
@@ -27,6 +28,21 @@ namespace VetAppointment.Infrastructure.Services
             smtp.Authenticate(appSettings["EmailConfiguration:Username"], appSettings["EmailConfiguration:Password"]);
             smtp.Send(email);
             smtp.Disconnect(true);
+        }
+
+        /****************
+         * EMAIL TEMPLATES
+         ****************/
+        public void SendPayment(string to, string clientName, string appointmentId)
+        {
+            string subject = "Appointment Created";
+            string body =
+                string.Format(
+                    "<h1>Hi {0}</h1>. " +
+                    "<p>An appointment was created for you." +
+                    " Please use the following link for payment.</p> " +
+                    "<a target='_blank' href='http://localhost:3000/payment?id={1}'>Pay here</a>",
+                    clientName, appointmentId);
         }
     }
 }

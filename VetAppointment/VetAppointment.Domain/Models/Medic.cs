@@ -49,5 +49,6 @@ namespace VetAppointment.Domain.Models
 
             return Result.Success();
         }
+        
     }
 }

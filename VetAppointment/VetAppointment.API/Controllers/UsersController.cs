@@ -6,7 +6,6 @@ using VetAppointment.Domain.Models;
 using VetAppointment.Domain.Models.AuthenticationModels;
 using VetAppointment.Infrastructure.Generics;
 using VetAppointment.Infrastructure.Services;
-
 using VetAppointment.Infrastructure.Generics.GenericFilters;
 using VetAppointment.Infrastructure.Generics.GenericRepositories;
 
@@ -44,8 +43,6 @@ namespace VetAppointment.API.Controllers
                 .GetAll()
                 .Result!
                 .FirstOrDefault(u => u.EmailAddress == dto.EmailAddress);
-            // var filterUser = new FilterUser(dto.Username, dto.Password);
-            // var user = userRepository.Select(filterUser);
 
             if (user == null)
                 return Ok(new Response(ResponseStatus.Error, "Invalid username"));
@@ -53,7 +50,8 @@ namespace VetAppointment.API.Controllers
                 return Ok(new Response(ResponseStatus.Error, "Invalid password"));
 
             var token = jwtService.Generate(user);
-            return Ok(new Response(ResponseStatus.Success, token));
+            var responseDto = new ResponseLoginDto(ResponseStatus.Success, token, user.Id, user.MedicId);
+            return Ok(responseDto);
         }
 
         [AllowAnonymous]
