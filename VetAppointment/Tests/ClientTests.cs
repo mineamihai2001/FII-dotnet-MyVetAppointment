@@ -18,7 +18,7 @@ namespace VetAppointment.Tests
             var emailAddress = "dragomir.ionut@gmail.com";
             var address = "Iasi";
 
-            var client = new Client(name, phoneNumber, emailAddress, address, Guid.NewGuid());
+            var client = new Client(name, phoneNumber, emailAddress, address);
             string dateInput = "Feb 25, 2022";
             var pets = new List<Patient>
             {
@@ -47,7 +47,7 @@ namespace VetAppointment.Tests
             var emailAddress = "dragomir.ionut@gmail.com";
             var address = "Iasi";
 
-            var client = new Client(name, phoneNumber, emailAddress, address, Guid.NewGuid());
+            var client = new Client(name, phoneNumber, emailAddress, address);
             string dateInput = "Feb 25, 2022";
             var pets = new List<Patient>
             {
@@ -70,7 +70,7 @@ namespace VetAppointment.Tests
             var emailAddress = "dragomir.ionut@gmail.com";
             var address = "Iasi";
 
-            var client = new Client(name, phoneNumber, emailAddress, address, Guid.NewGuid());
+            var client = new Client(name, phoneNumber, emailAddress, address);
             string dateInput = "Feb 25, 2022";
             var billings = new List<Bill>
             {
@@ -98,7 +98,7 @@ namespace VetAppointment.Tests
             var emailAddress = "dragomir.ionut@gmail.com";
             var address = "Iasi";
 
-            var client = new Client(name, phoneNumber, emailAddress, address, Guid.NewGuid());
+            var client = new Client(name, phoneNumber, emailAddress, address);
             var billings = new List<Bill>
             {
                

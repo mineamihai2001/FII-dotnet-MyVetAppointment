@@ -5,14 +5,13 @@ namespace VetAppointment.Domain.Models
 {
     public class Client
     {
-        public Client(string name, string phoneNumber, string emailAddress, string address, Guid medicId)
+        public Client(string name, string phoneNumber, string emailAddress, string address)
         {
             Id = Guid.NewGuid();
             Name = name;
             PhoneNumber = phoneNumber;
             EmailAddress = emailAddress;
             Address = address;
-            MedicId = medicId;
         }
 
         public Guid Id { get; private set; }
@@ -23,7 +22,6 @@ namespace VetAppointment.Domain.Models
         public List<Patient> Pets { get; private set; } = new List<Patient>();
         public List<Appointment> Appointments { get; private set; } = new List<Appointment>();
         public List<Bill> Billings { get; private set; } = new List<Bill>();
-        public Guid MedicId { get; private set; }
 
         public Result RegisterPetsToClient(List<Patient> pets)
         {
@@ -73,9 +71,5 @@ namespace VetAppointment.Domain.Models
             return Result.Success();
         }
 
-        public void AttachClientToMedic(Medic medic)
-        {
-            MedicId = medic.Id;
-        }
     }
 }
