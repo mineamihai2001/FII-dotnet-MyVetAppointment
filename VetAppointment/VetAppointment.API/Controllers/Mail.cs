@@ -15,7 +15,7 @@ namespace VetAppointment.API.Controllers
         [HttpGet]
         public IActionResult Send()
         {
-            var emailService = new CustomEmailService(this.configuration);
+            var emailService = new CustomEmailService(configuration);
             string to = "mineamihai2001@gmai.com";
             string subject = "Appointment Created";
             string body = string.Format("<h1>Hi {0}</h1>. <p>An appointment was created for you. Please use the following link for payment.</p> <a target='_blank' href='http://localhost:3000/payment?id={1}'>Pay here</a>", "Testuser", "1234");

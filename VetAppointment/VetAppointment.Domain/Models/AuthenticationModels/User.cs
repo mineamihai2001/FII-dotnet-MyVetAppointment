@@ -8,25 +8,19 @@ namespace VetAppointment.Domain.Models.AuthenticationModels
 {
     public class User
     {
-        public User(string username, string password, string role, string emailAdress, string firstName, string lastName, string phone)
+        public User(string emailAddress, string password, string role, Guid medicId)
         {
             Id = Guid.NewGuid();
-            Username=username;
-            Password=password;
-            Role=role;
-            EmailAdress=emailAdress;
-            FirstName=firstName;
-            LastName=lastName;
-            Phone=phone;
+            EmailAddress = emailAddress;
+            Password = password;
+            Role = role;
+            MedicId = medicId;
         }
 
         public Guid Id { get; set; }
-        public string Username { get; set; }
+        public string EmailAddress { get; set; }
         public string Password { get; set; }
-        public string EmailAdress { get; set; }
         public string Role { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public string Phone { get; set; }
+        public Guid MedicId { get; set; }
     }
 }

@@ -29,6 +29,7 @@ namespace VetAppointment.API.Controllers
         {
             this.clientRepository = clientRepository;
             this.medicRepository = medicRepository;
+            this.appointmentsRepository = appointmentsRepository;
             this.patientRepository = patientRepository;
             this.mapper = mapper;
             this.appointmentRepository=appointmentRepository;
@@ -47,7 +48,7 @@ namespace VetAppointment.API.Controllers
         }
 
         [HttpGet("{medicId:guid}/appointments")]
-        [Authorize(Roles = "Medic")]
+        //[Authorize(Roles = "Medic")]
         public async Task<IActionResult> GetAppointmenstForMedic(Guid medicId)
         {
             var medic = await medicRepository.GetById(medicId);
@@ -55,7 +56,7 @@ namespace VetAppointment.API.Controllers
             {
                 return NotFound("Medic not found!");
             }
-            IEnumerable<Appointment> appointments = await appointmentRepository.GetAll();
+            IEnumerable<Appointment> appointments = await appointmentsRepository.GetAll();
             return Ok(appointments.ToList().FindAll(a => a.Medic == medic));
         }
 
@@ -99,7 +100,7 @@ namespace VetAppointment.API.Controllers
         }
 
         [HttpPost("{medicId:guid}/appointments")]
-        [Authorize(Roles = "Medic")]
+        //[Authorize(Roles = "Medic")]
         public async Task<IActionResult> RegisterAppointments(Guid medicId,
             [FromBody] List<CreateAppointmentForMedicDto> dtos)
         {
@@ -114,8 +115,8 @@ namespace VetAppointment.API.Controllers
             medic.RegisterAppointmentsToMedic(appointments);
 
             appointments.ForEach(a => a.AttachAppointmentToMedic(medic));
-            appointments.ForEach(a => appointmentRepository.Add(a));
-            await appointmentRepository.SaveChanges();
+            appointments.ForEach(a => appointmentsRepository.Add(a));
+            await appointmentsRepository.SaveChanges();
             await medicRepository.SaveChanges();
             return NoContent();
         }

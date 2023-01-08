@@ -1,14 +1,12 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
-using System.CodeDom.Compiler;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 using VetAppointment.API.DTOs.Authenticate;
+using VetAppointment.API.Helpers;
 using VetAppointment.Domain.Models;
 using VetAppointment.Domain.Models.AuthenticationModels;
 using VetAppointment.Infrastructure.Generics;
+using VetAppointment.Infrastructure.Services;
+
 using VetAppointment.Infrastructure.Generics.GenericFilters;
 using VetAppointment.Infrastructure.Generics.GenericRepositories;
 
@@ -16,15 +14,20 @@ namespace VetAppointment.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UsersController : Controller
+    public class UsersController : ControllerBase
     {
-        private IConfiguration config;
+        private readonly IConfiguration configuration;
         private readonly IRepository<User> userRepository;
+        private readonly IRepository<Medic> medicRepository;
+        private readonly JwtService jwtService;
 
-        public UsersController(IConfiguration config, IRepository<User> userRepository)
+        public UsersController(IConfiguration configuration, IRepository<User> userRepository,
+            IRepository<Medic> medicRepository)
         {
-            this.config = config;
+            this.configuration = configuration;
             this.userRepository = userRepository;
+            this.medicRepository = medicRepository;
+            this.jwtService = new JwtService(configuration);
         }
 
         [HttpGet]
@@ -37,63 +40,43 @@ namespace VetAppointment.API.Controllers
         [HttpPost("/login")]
         public async Task<IActionResult> Login([FromBody] UserLoginDto dto)
         {
+            var user = userRepository
+                .GetAll()
+                .Result!
+                .FirstOrDefault(u => u.EmailAddress == dto.EmailAddress);
             var filterUser = new FilterUser(dto.Username, dto.Password);
             var user = userRepository.Select(filterUser);
 
-            if (user != null) {
-                var token = Generate(user);
-                return Ok(token);
-            }
+            if (user == null)
+                return Ok(new Response(ResponseStatus.Error, "Invalid username"));
+            if (!BCrypt.Net.BCrypt.Verify(dto.Password, user.Password))
+                return Ok(new Response(ResponseStatus.Error, "Invalid password"));
 
-            return NotFound("User not found!");
+            var token = jwtService.Generate(user);
+            return Ok(new Response(ResponseStatus.Success, token));
         }
 
         [AllowAnonymous]
         [HttpPost("/register")]
         public async Task<IActionResult> Register([FromBody] UserRegisterDto dto)
         {
-            //var verifyUser = userRepository.GetByUsername(dto.Username);
-            //if(verifyUser != null)
-            //{
-            //    return Conflict("Username taken!");
-            //}
+            var exists = userRepository
+                .GetAll()
+                .Result!
+                .FirstOrDefault(u => u.EmailAddress == dto.EmailAddress);
 
-            //verifyUser = userRepository.GetByEmail(dto.EmailAdress);
-            //if(verifyUser != null)
-            //{
-            //    return Conflict("Email already used!");
-            //}
+            if (exists != null) return Ok(new Response(ResponseStatus.Error, "Email already taken"));
 
-            var user = new User(dto.Username, dto.Password, dto.Role, dto.EmailAdress, dto.FirstName, dto.LastName, dto.Phone);
+            var medic = new Medic("", "", dto.EmailAddress);
+            await medicRepository.Add(medic);
+            await medicRepository.SaveChanges();
+
+            var hashedPassword = BCrypt.Net.BCrypt.HashPassword(dto.Password);
+            var user = new User(dto.EmailAddress, hashedPassword, dto.Role, medic.Id);
 
             await userRepository.Add(user);
             await userRepository.SaveChanges();
             return Created(nameof(Get), user);
         }
-
-        private string Generate(User user)
-        {
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["Jwt:Key"]));
-            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
-
-            var claims = new[]
-            {
-                new Claim(ClaimTypes.NameIdentifier, user.Username),
-                new Claim(ClaimTypes.Email, user.EmailAdress),
-                new Claim(ClaimTypes.Role, user.Role),
-                new Claim(ClaimTypes.GivenName, user.FirstName),
-                new Claim(ClaimTypes.Surname, user.LastName),
-                new Claim(ClaimTypes.MobilePhone, user.Phone)
-            };
-
-            var token = new JwtSecurityToken(config["Jwt:Issuer"],
-                config["Jwt:Audience"],
-                claims,
-                expires: DateTime.Now.AddHours(1),
-                signingCredentials: credentials);
-
-            return new JwtSecurityTokenHandler().WriteToken(token);
-        }
-
     }
 }

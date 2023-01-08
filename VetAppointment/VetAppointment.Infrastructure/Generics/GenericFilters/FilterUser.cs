@@ -20,7 +20,7 @@ namespace VetAppointment.Infrastructure.Generics.GenericFilters
 
         public User? Filter(IEnumerable<User> queryableBase)
         {
-            return queryableBase.Where(u => u.Username == Username && u.Password == Password).First();
+            return queryableBase.Where(u => u.EmailAddress == Username && u.Password == Password).First();
         }
     }
 }
