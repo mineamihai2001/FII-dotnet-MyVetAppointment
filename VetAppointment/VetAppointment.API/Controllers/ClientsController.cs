@@ -150,5 +150,25 @@ namespace VetAppointment.API.Controllers
             await patientRepository.SaveChanges();
             return NoContent();
         }
+
+        [HttpGet("{clientId:guid}/history")]
+        public async Task<IActionResult> getMedicalHistory(Guid clientId)
+        {
+            var client = await clientRepository.GetById(clientId);
+            if (client == null)
+            {
+                return NotFound();
+            }
+
+            Dictionary<string, List<Appointment>> medHistory = new Dictionary<string, List<Appointment>>();
+            foreach (Patient patient in client.Pets) {
+                if (!medHistory.ContainsKey(patient.Name) && patient.Appointments.Count > 0)
+                {
+                    medHistory.Add(patient.Name, patient.Appointments);
+                }
+            }
+
+            return Ok(medHistory);
+        }
     }
 }
