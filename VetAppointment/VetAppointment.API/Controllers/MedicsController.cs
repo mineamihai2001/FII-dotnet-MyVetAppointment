@@ -21,12 +21,14 @@ namespace VetAppointment.API.Controllers
         private readonly IRepository<Client> clientRepository;
         private readonly IRepository<Patient> patientRepository;
         private readonly IRepository<Medic> medicRepository;
+        private readonly IRepository<Appointment> appointmentsRepository;
         private readonly IMapper mapper;
 
-        public MedicsController(IRepository<Client> clientRepository, IRepository<Patient> patientRepository, IRepository<Medic> medicRepository, IMapper mapper)
+        public MedicsController(IRepository<Client> clientRepository, IRepository<Patient> patientRepository, IRepository<Medic> medicRepository, IRepository<Appointment> appointmentsRepository, IMapper mapper)
         {
             this.clientRepository = clientRepository;
             this.medicRepository = medicRepository;
+            this.appointmentsRepository = appointmentsRepository;
             this.patientRepository = patientRepository;
             this.mapper = mapper;
         }
@@ -44,7 +46,7 @@ namespace VetAppointment.API.Controllers
         }
 
         [HttpGet("{medicId:guid}/appointments")]
-        [Authorize(Roles = "Medic")]
+        //[Authorize(Roles = "Medic")]
         public async Task<IActionResult> GetAppointmenstForMedic(Guid medicId)
         {
             var medic = await medicRepository.GetById(medicId);
@@ -52,7 +54,7 @@ namespace VetAppointment.API.Controllers
             {
                 return NotFound("Medic not found!");
             }
-            IEnumerable<Appointment> appointments = await appointmentRepository.GetAll();
+            IEnumerable<Appointment> appointments = await appointmentsRepository.GetAll();
             return Ok(appointments.ToList().FindAll(a => a.Medic == medic));
         }
 
@@ -96,7 +98,7 @@ namespace VetAppointment.API.Controllers
         }
 
         [HttpPost("{medicId:guid}/appointments")]
-        [Authorize(Roles = "Medic")]
+        //[Authorize(Roles = "Medic")]
         public async Task<IActionResult> RegisterAppointments(Guid medicId,
             [FromBody] List<CreateAppointmentForMedicDto> dtos)
         {
@@ -111,8 +113,8 @@ namespace VetAppointment.API.Controllers
             medic.RegisterAppointmentsToMedic(appointments);
 
             appointments.ForEach(a => a.AttachAppointmentToMedic(medic));
-            appointments.ForEach(a => appointmentRepository.Add(a));
-            await appointmentRepository.SaveChanges();
+            appointments.ForEach(a => appointmentsRepository.Add(a));
+            await appointmentsRepository.SaveChanges();
             await medicRepository.SaveChanges();
             return NoContent();
         }

@@ -9,7 +9,7 @@ namespace VetAppointment.Infrastructure.Generics.GenericRepositories
     {
         public UserRepository(DatabaseContext context) : base(context)
         {
-           
+
         }
     }
 }
