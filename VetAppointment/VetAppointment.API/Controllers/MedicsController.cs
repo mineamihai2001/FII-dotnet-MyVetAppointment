@@ -11,6 +11,7 @@ using FluentValidation;
 using AutoMapper;
 using System.Data;
 using VetAppointment.Infrastructure.Generics.GenericRepositories;
+using Microsoft.AspNetCore.Authorization;
 
 namespace VetAppointment.API.Controllers
 {
@@ -21,16 +22,17 @@ namespace VetAppointment.API.Controllers
         private readonly IRepository<Client> clientRepository;
         private readonly IRepository<Patient> patientRepository;
         private readonly IRepository<Medic> medicRepository;
-        private readonly IRepository<Appointment> appointmentsRepository;
+        private readonly IRepository<Appointment> appointmentRepository;
         private readonly IMapper mapper;
 
-        public MedicsController(IRepository<Client> clientRepository, IRepository<Patient> patientRepository, IRepository<Medic> medicRepository, IRepository<Appointment> appointmentsRepository, IMapper mapper)
+        public MedicsController(IRepository<Client> clientRepository, IRepository<Patient> patientRepository, IRepository<Medic> medicRepository, IMapper mapper, IRepository<Appointment> appointmentRepository)
         {
             this.clientRepository = clientRepository;
             this.medicRepository = medicRepository;
             this.appointmentsRepository = appointmentsRepository;
             this.patientRepository = patientRepository;
             this.mapper = mapper;
+            this.appointmentRepository=appointmentRepository;
         }
 
         [HttpGet]

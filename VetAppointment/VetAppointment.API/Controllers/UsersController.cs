@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using VetAppointment.API.DTOs.Authenticate;
 using VetAppointment.API.Helpers;
@@ -7,6 +7,8 @@ using VetAppointment.Domain.Models.AuthenticationModels;
 using VetAppointment.Infrastructure.Generics;
 using VetAppointment.Infrastructure.Services;
 
+using VetAppointment.Infrastructure.Generics.GenericFilters;
+using VetAppointment.Infrastructure.Generics.GenericRepositories;
 
 namespace VetAppointment.API.Controllers
 {
@@ -42,6 +44,8 @@ namespace VetAppointment.API.Controllers
                 .GetAll()
                 .Result!
                 .FirstOrDefault(u => u.EmailAddress == dto.EmailAddress);
+            var filterUser = new FilterUser(dto.Username, dto.Password);
+            var user = userRepository.Select(filterUser);
 
             if (user == null)
                 return Ok(new Response(ResponseStatus.Error, "Invalid username"));
