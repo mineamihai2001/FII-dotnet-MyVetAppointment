@@ -25,14 +25,14 @@ namespace VetAppointment.API.Controllers
         private readonly IRepository<Appointment> appointmentRepository;
         private readonly IMapper mapper;
 
-        public MedicsController(IRepository<Client> clientRepository, IRepository<Patient> patientRepository, IRepository<Medic> medicRepository, IMapper mapper, IRepository<Appointment> appointmentRepository)
+        public MedicsController(IRepository<Client> clientRepository, IRepository<Patient> patientRepository,
+            IRepository<Medic> medicRepository, IMapper mapper, IRepository<Appointment> appointmentRepository)
         {
             this.clientRepository = clientRepository;
             this.medicRepository = medicRepository;
-            this.appointmentsRepository = appointmentsRepository;
             this.patientRepository = patientRepository;
             this.mapper = mapper;
-            this.appointmentRepository=appointmentRepository;
+            this.appointmentRepository = appointmentRepository;
         }
 
         [HttpGet]
@@ -56,7 +56,8 @@ namespace VetAppointment.API.Controllers
             {
                 return NotFound("Medic not found!");
             }
-            IEnumerable<Appointment> appointments = await appointmentsRepository.GetAll();
+
+            IEnumerable<Appointment> appointments = await appointmentRepository.GetAll();
             return Ok(appointments.ToList().FindAll(a => a.Medic == medic));
         }
 
@@ -70,10 +71,13 @@ namespace VetAppointment.API.Controllers
             {
                 foreach (var failure in results.Errors)
                 {
-                    Console.WriteLine("Property " + failure.PropertyName + " failed validation. Error was: " + failure.ErrorMessage);
+                    Console.WriteLine("Property " + failure.PropertyName + " failed validation. Error was: " +
+                                      failure.ErrorMessage);
                 }
+
                 return BadRequest(results.Errors);
             }
+
             await medicRepository.Add(medic);
             await medicRepository.SaveChanges();
             return Created(nameof(Get), medic);
@@ -89,7 +93,8 @@ namespace VetAppointment.API.Controllers
                 return NotFound();
             }
 
-            List<Client> clients = dtos.Select(d => new Client(d.Name, d.PhoneNumber, d.EmailAddress, d.Address, medicId)).ToList();
+            List<Client> clients = dtos
+                .Select(d => new Client(d.Name, d.PhoneNumber, d.EmailAddress, d.Address, medicId)).ToList();
 
             medic.RegisterClientsToMedic(clients);
 
@@ -110,13 +115,14 @@ namespace VetAppointment.API.Controllers
                 return NotFound();
             }
 
-            List<Appointment> appointments = dtos.Select(d => new Appointment(d.Type, d.StartDate, d.EndDate, d.Description)).ToList();
+            List<Appointment> appointments =
+                dtos.Select(d => new Appointment(d.Type, d.StartDate, d.EndDate, d.Description)).ToList();
 
             medic.RegisterAppointmentsToMedic(appointments);
 
             appointments.ForEach(a => a.AttachAppointmentToMedic(medic));
-            appointments.ForEach(a => appointmentsRepository.Add(a));
-            await appointmentsRepository.SaveChanges();
+            appointments.ForEach(a => appointmentRepository.Add(a));
+            await appointmentRepository.SaveChanges();
             await medicRepository.SaveChanges();
             return NoContent();
         }
@@ -147,6 +153,7 @@ namespace VetAppointment.API.Controllers
                     medic.GetType().GetProperty(key)!.SetValue(medic, newValue);
                 }
             }
+
             await medicRepository.Update(medic);
             await medicRepository.SaveChanges();
             return Created(nameof(Get), medic);

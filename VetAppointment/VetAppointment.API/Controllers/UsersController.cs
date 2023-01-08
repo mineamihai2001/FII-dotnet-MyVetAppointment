@@ -44,8 +44,8 @@ namespace VetAppointment.API.Controllers
                 .GetAll()
                 .Result!
                 .FirstOrDefault(u => u.EmailAddress == dto.EmailAddress);
-            var filterUser = new FilterUser(dto.Username, dto.Password);
-            var user = userRepository.Select(filterUser);
+            // var filterUser = new FilterUser(dto.Username, dto.Password);
+            // var user = userRepository.Select(filterUser);
 
             if (user == null)
                 return Ok(new Response(ResponseStatus.Error, "Invalid username"));
