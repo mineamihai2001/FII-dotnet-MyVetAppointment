@@ -19,6 +19,7 @@
 		public Medic? Medic { get; private set; }
 		public Room? Room { get; private set; }
 		public Patient? Patient { get; private set; }
+		public Client? Client { get; private set; }
 		public Bill? Bill { get; private set; }
 
 		public void AttachAppointmentToRoom(Room room)
@@ -31,9 +32,14 @@
 			Medic = medic;
 		}
 
-		public void AttachAppointmentToPatient(Patient patient)
+        public void AttachAppointmentToPatient(Patient patient)
+        {
+            Patient = patient;
+        }
+
+        public void AttachAppointmentToClient(Client client)
 		{
-			Patient = patient;
+			Client = client;
 		}
 
 		public void AttachAppointmentToBilling(Bill bill)
