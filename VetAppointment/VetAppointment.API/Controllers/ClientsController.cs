@@ -154,5 +154,41 @@ namespace VetAppointment.API.Controllers
             await patientRepository.SaveChanges();
             return NoContent();
         }
+
+        [HttpGet("{clientId:guid}/history")]
+        public async Task<IActionResult> getMedicalHistory(Guid clientId)
+        {
+            var client = await clientRepository.GetById(clientId);
+            if (client == null)
+            {
+                return NotFound();
+            }
+
+            Dictionary<string, List<Appointment>> medHistory = new Dictionary<string, List<Appointment>>();
+            foreach (Appointment appointment in client.Appointments) {
+                string patientName;
+                if (appointment.Patient == null)
+                {
+                    patientName = "generic";
+                }
+                else
+                {
+                    patientName = appointment.Patient.Name;
+                }
+
+                if (!medHistory.ContainsKey(patientName))
+                {
+                    var patientHistory = new List<Appointment>();
+                    patientHistory.Add(appointment);
+                    medHistory.Add(patientName, patientHistory);
+                }
+                else
+                {
+                    medHistory[patientName].Add(appointment);
+                }
+            }
+
+            return Ok(medHistory);
+        }
     }
 }
