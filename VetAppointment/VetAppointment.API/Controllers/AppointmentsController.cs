@@ -52,12 +52,23 @@ namespace VetAppointment.API.Controllers
             var medic = await medicRepository.GetById(dto.MedicId);
             if (medic == null)
             {
-                return NotFound("Medicul nu exista!");
+                return NotFound("Medic not found!");
+            }
+
+            var client = await clientRepository.GetById(dto.ClientId);
+            if(client == null)
+            {
+                return NotFound("Client not found!");
             }
 
             var appointment = new Appointment(dto.Type, dto.StartDate, dto.EndDate, dto.Description);
+            
             appointment.AttachAppointmentToMedic(medic);
             medic.RegisterAppointmentsToMedic(new List<Appointment>() { appointment });
+
+            appointment.AttachAppointmentToClient(client);
+            client.RegisterAppointmentsToClient(new List<Appointment>() { appointment });
+
             var validator = new AppointmentValidator();
             ValidationResult results = validator.Validate(appointment);
             if (!results.IsValid)
@@ -71,6 +82,7 @@ namespace VetAppointment.API.Controllers
             await appointmentRepository.Add(appointment);
             await appointmentRepository.SaveChanges();
             await medicRepository.SaveChanges();
+            await clientRepository.SaveChanges();
             return Created(nameof(Get), appointment);
         }
 
@@ -83,15 +95,25 @@ namespace VetAppointment.API.Controllers
             {
 
                 var medic = await medicRepository.GetById(dto.MedicId);
+                var client = await clientRepository.GetById(dto.ClientId);
                 if (medic == null)
                 {
-                    Console.WriteLine("Medicul" + dto.MedicId + "doesn't exist!");
+                    Console.WriteLine("The medic " + dto.MedicId + " doesn't exist!");
+                }
+                else if(client == null)
+                {
+                    Console.WriteLine("The client " + dto.ClientId + " doesn't exist!");
                 }
                 else
                 {
                     var appointment = new Appointment(dto.Type, dto.StartDate, dto.EndDate, dto.Description);
+                    
                     appointment.AttachAppointmentToMedic(medic);
                     medic.RegisterAppointmentsToMedic(new List<Appointment>() { appointment });
+
+                    appointment.AttachAppointmentToClient(client);
+                    client.RegisterAppointmentsToClient(new List<Appointment>() { appointment });
+
                     ValidationResult results = validator.Validate(appointment);
                     if (!results.IsValid)
                     {
@@ -105,6 +127,7 @@ namespace VetAppointment.API.Controllers
                         await appointmentRepository.Add(appointment);
                         await appointmentRepository.SaveChanges();
                         await medicRepository.SaveChanges();
+                        await clientRepository.SaveChanges();
                         response.Add(appointment);
                     }
                 }
