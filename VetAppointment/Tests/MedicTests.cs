@@ -4,50 +4,6 @@ namespace Tests
 {
     public class MedicTests
     {
-        [Fact]
-        public void When_RegisterClientsToMedic_Then_ShouldReturnSucces()
-        {
-            //Arrange
-            var name = "Iordache Alexandru";
-            var phoneNumber = "1234567890";
-            var emailAddress = "iordache@gmail.com";
-            var medic = new Medic(name, phoneNumber, emailAddress);
-            var clients = new List<Client>
-            {
-                new Client(
-                "Dragomir Ionut",
-                "0765321908",
-                "dragomir.ionut@gmail.com",
-                "Iasi",
-                medic.Id)
-            };
-            
-            //Act
-            var result = medic.RegisterClientsToMedic(clients);
-            
-            //Assert
-            result.IsSuccess.Should().BeTrue();
-        }
-
-        [Fact]
-        public void When_RegisterZeroClientsToMedic_Then_ShouldReturnFailure()
-        {
-            //Arrange
-            var name = "Iordache Alexandru";
-            var phoneNumber = "1234567890";
-            var emailAddress = "iordache@gmail.com";
-            var medic = new Medic(name, phoneNumber, emailAddress);
-            var clients = new List<Client>
-            {
-                
-            };
-
-            //Act
-            var result = medic.RegisterClientsToMedic(clients);
-
-            //Assert
-            result.IsFailure.Should().BeTrue();
-        }
 
         [Fact]
         public void When_RegisterAppointmentsToMedic_Then_ShouldReturnSucces()

@@ -54,8 +54,6 @@ namespace VetAppointment.API.Controllers
                 {
                     temp[prop.Name] = prop.GetValue(client, null)!;
                 }
-                var medic = await medicRepository.GetById(client.MedicId);
-                temp["Medic"] = medic!.Name;
                 return temp;
             }).ToList();
             return Ok(result);
@@ -64,7 +62,7 @@ namespace VetAppointment.API.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateClientDto dto)
         {
-            var client = new Client(dto.Name, dto.PhoneNumber, dto.EmailAddress, dto.Address, dto.MedicId);
+            var client = new Client(dto.Name, dto.PhoneNumber, dto.EmailAddress, dto.Address);
             var validator = new ClientValidator();
             ValidationResult results = validator.Validate(client);
             if (!results.IsValid)
@@ -87,7 +85,7 @@ namespace VetAppointment.API.Controllers
             var validator = new ClientValidator();
             dtos.ForEach(async dto =>
             {
-                var client = new Client(dto.Name, dto.PhoneNumber, dto.EmailAddress, dto.Address, dto.MedicId);
+                var client = new Client(dto.Name, dto.PhoneNumber, dto.EmailAddress, dto.Address);
                 ValidationResult results = validator.Validate(client);
                 if (!results.IsValid)
                 {

@@ -15,25 +15,8 @@ namespace VetAppointment.Domain.Models
         public string Name { get; private set; }
         public string PhoneNumber { get; private set; }
         public string EmailAddress { get; private set; }
-        public List<Client> Clients { get; private set; } = new List<Client>();
         public List<Patient> Patients { get; private set; } = new List<Patient>();
         public List<Appointment> Appointments { get; private set; } = new List<Appointment>(); 
-
-       public Result RegisterClientsToMedic(List<Client> clients)
-        {
-            if (!clients.Any())
-            {
-                return Result.Failure("Add at least a client to the medic");
-            }
-
-            clients.ForEach(client =>
-            {
-                client.AttachClientToMedic(this);
-                Clients.Add(client);
-            });
-            
-            return Result.Success();
-        }
 
         public Result RegisterPatientsToMedic(List<Patient> patients)
         {

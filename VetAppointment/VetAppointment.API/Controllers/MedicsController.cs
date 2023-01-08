@@ -83,27 +83,6 @@ namespace VetAppointment.API.Controllers
             return Created(nameof(Get), medic);
         }
 
-        [HttpPost("{medicId:guid}/clients")]
-        public async Task<IActionResult> RegisterClients(Guid medicId,
-            [FromBody] List<CreateClientDto> dtos)
-        {
-            var medic = await medicRepository.GetById(medicId);
-            if (medic == null)
-            {
-                return NotFound();
-            }
-
-            List<Client> clients = dtos
-                .Select(d => new Client(d.Name, d.PhoneNumber, d.EmailAddress, d.Address, medicId)).ToList();
-
-            medic.RegisterClientsToMedic(clients);
-
-            clients.ForEach(c => c.AttachClientToMedic(medic));
-            clients.ForEach(c => clientRepository.Add(c));
-            await patientRepository.SaveChanges();
-            return NoContent();
-        }
-
         [HttpPost("{medicId:guid}/appointments")]
         //[Authorize(Roles = "Medic")]
         public async Task<IActionResult> RegisterAppointments(Guid medicId,
