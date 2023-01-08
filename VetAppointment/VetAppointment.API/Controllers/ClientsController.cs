@@ -165,10 +165,26 @@ namespace VetAppointment.API.Controllers
             }
 
             Dictionary<string, List<Appointment>> medHistory = new Dictionary<string, List<Appointment>>();
-            foreach (Patient patient in client.Pets) {
-                if (!medHistory.ContainsKey(patient.Name) && patient.Appointments.Count > 0)
+            foreach (Appointment appointment in client.Appointments) {
+                string patientName;
+                if (appointment.Patient == null)
                 {
-                    medHistory.Add(patient.Name, patient.Appointments);
+                    patientName = "generic";
+                }
+                else
+                {
+                    patientName = appointment.Patient.Name;
+                }
+
+                if (!medHistory.ContainsKey(patientName))
+                {
+                    var patientHistory = new List<Appointment>();
+                    patientHistory.Add(appointment);
+                    medHistory.Add(patientName, patientHistory);
+                }
+                else
+                {
+                    medHistory[patientName].Add(appointment);
                 }
             }
 
