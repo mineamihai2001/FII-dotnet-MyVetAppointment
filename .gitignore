@@ -33,6 +33,6 @@ msbuild.wrn
 .idea/
 
 VetAppointment/.idea/
-VetAppointment/VetAppointment.API/VetAppointment.db
+# VetAppointment/VetAppointment.API/VetAppointment.db
 VetAppointment/VetAppointment.API/VetAppointment.db-shm
 VetAppointment/VetAppointment.API/VetAppointment.db-wal
